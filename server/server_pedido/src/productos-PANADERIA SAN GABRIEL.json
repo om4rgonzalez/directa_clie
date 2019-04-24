@@ -1,0 +1,10 @@
+[{
+    "categoria": "PAN",
+    "subcategoria": "PAN",
+    "productos": [
+        { "nombreProducto": "MIGNON", "unidadMedida": "KG", "precioProveedor": 45.00, "precioSugerido": 60.00 },
+        { "nombreProducto": "BIZCOCHO", "unidadMedida": "KG", "precioProveedor": 55.00, "precioSugerido": 70.00 },
+        { "nombreProducto": "PREPIZZA", "unidadMedida": "UNIDAD", "precioProveedor": 20.00, "precioSugerido": 220.00 },
+        { "nombreProducto": "PAN RALLADO", "unidadMedida": "KG", "precioProveedor": 45.00, "precioSugerido": 50.00 }
+    ]
+}]

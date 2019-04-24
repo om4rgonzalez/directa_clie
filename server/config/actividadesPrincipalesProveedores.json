@@ -1,0 +1,65 @@
+[{
+        "nombre": "COMESTIBLES",
+        "orden": 1
+    },
+    {
+        "nombre": "PANADERIA",
+        "orden": 2
+    },
+    {
+        "nombre": "BEBIDAS",
+        "orden": 3
+    },
+    {
+        "nombre": "PRODUCTOS AVICOLAS",
+        "orden": 4
+    },
+    {
+        "nombre": "FIAMBRES",
+        "orden": 6
+    },
+    {
+        "nombre": "CARNES",
+        "orden": 5
+    },
+    {
+        "nombre": "GOLOSINAS",
+        "orden": 8
+    },
+    {
+        "nombre": "LACTEOS",
+        "orden": 7
+    },
+    {
+        "nombre": "PAPELERÍA Y DESCARTABLES",
+        "orden": 9
+    },
+    {
+        "nombre": "OTRO",
+        "orden": 1001
+    },
+    {
+        "nombre": "FRUTAS Y VERDURAS",
+        "orden": 10
+    },
+    {
+        "nombre": "GAS",
+        "orden": 11
+    },
+    {
+        "nombre": "LIMPIEZA E HIGIENE",
+        "orden": 12
+    },
+    {
+        "nombre": "SERVICIOS DESINFECCION",
+        "orden": 13
+    },
+    {
+        "nombre": "SERVICIOS LIMPIEZA",
+        "orden": 14
+    },
+    {
+        "nombre": "HELADOS",
+        "orden": 15
+    }
+]

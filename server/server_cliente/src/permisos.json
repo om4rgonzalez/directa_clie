@@ -1,0 +1,18 @@
+[{
+        "url": "/cliente/nuevo",
+        "roles": [1, 2, 3]
+    },
+    {
+        "url": "/cliente/todos",
+        "roles": [1, 2, 3]
+    },
+    {
+        "url": "/cliente/buscar_por_dni",
+        "roles": [1, 2, 3]
+    },
+    {
+        "url": "/cliente/deshabilitar",
+        "roles": [1, 2, 3]
+    }
+
+]

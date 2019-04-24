@@ -1,0 +1,27 @@
+[{
+        "url": "/usuario/cambiar_clave/",
+        "roles": [1, 2, 3, 4]
+    },
+    {
+        "url": "/usuario/todos/",
+        "roles": [1, 2]
+    },
+    {
+        "url": "/usuario/nuevo",
+        "roles": [1, 2]
+    },
+    {
+        "url": "/usuario/deshabilitar/",
+        "roles": [1, 2]
+    },
+    {
+        "url": "/usuario/roles_permitidos",
+        "roles": [1, 2, 3]
+    },
+    {
+        "url": "/usuario/blanquear_claves",
+        "roles": [1, 2]
+    }
+
+
+]

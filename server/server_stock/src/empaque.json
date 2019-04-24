@@ -1,0 +1,19 @@
+[{
+        "empaque": "CAJON"
+    },
+    {
+        "empaque": "BOLSA"
+    },
+    {
+        "empaque": "PACK"
+    },
+    {
+        "empaque": "UNIDAD"
+    },
+    {
+        "empaque": "ATADO"
+    },
+    {
+        "empaque": "CAJA"
+    }
+]

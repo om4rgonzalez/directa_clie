@@ -1,0 +1,29 @@
+[{
+        "tipoPersoneria": "NO TIENE",
+        "orden": 1
+    },
+    {
+        "tipoPersoneria": "MONOTRIBUTO",
+        "orden": 2
+    },
+    {
+        "tipoPersoneria": "S.A.",
+        "orden": 3
+    },
+    {
+        "tipoPersoneria": "S.R.L",
+        "orden": 4
+    },
+    {
+        "tipoPersoneria": "COOPERATIVA",
+        "orden": 5
+    },
+    {
+        "tipoPersoneria": "S.A.S.",
+        "orden": 6
+    },
+    {
+        "tipoPersoneria": "S.C.A.",
+        "orden": 7
+    }
+]

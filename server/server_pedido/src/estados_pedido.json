@@ -1,0 +1,33 @@
+[{
+        "nombreEstado": "PEDIDO SOLICITADO",
+        "estadoTerminal": false
+    },
+    {
+        "nombreEstado": "ACEPTADO",
+        "estadoTerminal": false
+    },
+    {
+        "nombreEstado": "RECHAZADO",
+        "estadoTerminal": true
+    },
+    {
+        "nombreEstado": "EN CAMINO",
+        "estadoTerminal": false
+    },
+    {
+        "nombreEstado": "ENTREGADO",
+        "estadoTerminal": true
+    },
+    {
+        "nombreEstado": "VISITADO",
+        "estadoTerminal": false
+    },
+    {
+        "nombreEstado": "EN PROCESO DE DEVOLUCION",
+        "estadoTerminal": false
+    },
+    {
+        "nombreEstado": "NO ENTREGADO",
+        "estadoTerminal": true
+    }
+]

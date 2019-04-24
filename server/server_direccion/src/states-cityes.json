@@ -1,0 +1,34 @@
+[{
+    "iso_31662": "AR-Y",
+    "provincia": "Jujuy",
+    "capital": "San Salvador de Jujuy",
+    "localidades": [{
+            "localidad": "San Salvador",
+            "barrios": [
+                "Almirante Brown",
+                "San Pedrito",
+                "Santa Rita",
+                "Malvinas",
+                "Alto Comedero",
+                "Los Perales",
+                "Bajo Exodo",
+                "San Martin"
+            ]
+        },
+        {
+            "localidad": "Palpala",
+            "barrios": [
+                "San Cayetano",
+                "Las Tipas",
+                "Antartida Argentina",
+                "18 de Noviembre"
+            ]
+        },
+        {
+            "localidad": "Humahuaca",
+            "barrios": [
+                "Alto Independencia"
+            ]
+        }
+    ]
+}]

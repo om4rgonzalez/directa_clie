@@ -1,0 +1,161 @@
+[{
+    "categoria": "HELADO",
+    "subcategoria": "BASE",
+    "productos": [{
+            "nombreProducto": "HELADO AL AGUA X 12 LTS",
+            "unidadMedida": "TACHO",
+            "precioProveedor": "350",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "HELADO DE CREMA X 12 LTS",
+            "unidadMedida": "TACHO",
+            "precioProveedor": "410",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "PALITO DE AGUA X 20 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "70",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "PALITO DE CREMA X 20 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "75",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "PALITO BOMBON X 20 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "113",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "ALMENDRADO X 8 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "55",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "CASATTA X 8 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "55",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "DELICIA DE DULCE DE LECHE X 8 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "70",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "BOMBON SUIZO X 8 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "75",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "BOMBON ESCOCES X 8 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "80",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "VIA BOM X 8 UNIDADES",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "65",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "TORTA HELADA",
+            "unidadMedida": "CAJA",
+            "precioProveedor": "121",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "HELADO POTE X LITRO",
+            "unidadMedida": "POTE",
+            "precioProveedor": "50",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "HELADO POTE X 3 LTS",
+            "unidadMedida": "POTE",
+            "precioProveedor": "133",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "PALITO DE AGUA X 4 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "280",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "PALITO DE CREMA X 4 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "300",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "PALITO BOMBON X 4 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "452",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "ALEMDRADO X 6 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "220",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "CASATTA X 6 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "220",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "DELICIA DULCE DE LECHE X 4 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "280",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "BOMBON SUIZO X 6 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "450",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "BOMBON ESCOCES X 6 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "480",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "VIA BOM X 6 CAJAS",
+            "unidadMedida": "PACK",
+            "precioProveedor": "390",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "TORTA HELADA X 4 UNIDADES",
+            "unidadMedida": "PACK",
+            "precioProveedor": "484",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "HELADO POTE X 4 UNIDADES",
+            "unidadMedida": "PACK",
+            "precioProveedor": "300",
+            "precioSugerido": "0"
+        },
+        {
+            "nombreProducto": "HELADO POTE X 4 UNIDADES",
+            "unidadMedida": "PACK",
+            "precioProveedor": "798",
+            "precioSugerido": "0"
+        }
+    ]
+}]

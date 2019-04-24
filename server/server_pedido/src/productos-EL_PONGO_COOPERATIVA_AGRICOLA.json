@@ -1,0 +1,53 @@
+[{
+        "categoria": "FRUTAS Y VERDURAS",
+        "subcategoria": "VERDURAS",
+        "productos": [
+            { "nombreProducto": "ACELGA", "unidadMedida": "ATADO", "precioProveedor": 50.00, "precioSugerido": 80.00 },
+            { "nombreProducto": "APIO", "unidadMedida": "ATADO", "precioProveedor": 30.00, "precioSugerido": 50.00 },
+            { "nombreProducto": "ARVEJA", "unidadMedida": "CAJON", "precioProveedor": 110.00, "precioSugerido": 150.00 },
+            { "nombreProducto": "BATATA", "unidadMedida": "BOLSA", "precioProveedor": 150.00, "precioSugerido": 200.00 },
+            { "nombreProducto": "BROCOLI", "unidadMedida": "CAJON", "precioProveedor": 100.00, "precioSugerido": 150.00 },
+            { "nombreProducto": "CEBOLLA", "unidadMedida": "BOLSA", "precioProveedor": 100.00, "precioSugerido": 150.00 },
+            { "nombreProducto": "CEBOLLA DE VERDEO", "unidadMedida": "ATADO", "precioProveedor": 40.00, "precioSugerido": 70.00 },
+            { "nombreProducto": "CHAUCHA", "unidadMedida": "CAJON", "precioProveedor": 100.00, "precioSugerido": 150.00 },
+            { "nombreProducto": "CHOCLO", "unidadMedida": "CAJON", "precioProveedor": 300.00, "precioSugerido": 500.00 },
+            { "nombreProducto": "ESPINACA", "unidadMedida": "ATADO", "precioProveedor": 60.00, "precioSugerido": 100.00 },
+            { "nombreProducto": "HABAS", "unidadMedida": "CAJ0N", "precioProveedor": 500.00, "precioSugerido": 800.00 },
+            { "nombreProducto": "LECHUGA", "unidadMedida": "CAJON", "precioProveedor": 400.00, "precioSugerido": 600.00 },
+            { "nombreProducto": "PAPA BLANCA", "unidadMedida": "BOLSA", "precioProveedor": 140.00, "precioSugerido": 220.00 },
+            { "nombreProducto": "PEREJIL", "unidadMedida": "ATADO", "precioProveedor": 50.00, "precioSugerido": 80.00 },
+            { "nombreProducto": "PIMIENTO", "unidadMedida": "CAJON", "precioProveedor": 400.00, "precioSugerido": 500.00 },
+            { "nombreProducto": "REMOLACHA", "unidadMedida": "ATADO", "precioProveedor": 50.00, "precioSugerido": 90.00 },
+            { "nombreProducto": "REPOLLO BLANCO", "unidadMedida": "CAJON", "precioProveedor": 500.00, "precioSugerido": 800.00 },
+            { "nombreProducto": "REPOLLO COLORADO", "unidadMedida": "CAJON", "precioProveedor": 500.00, "precioSugerido": 800.00 },
+            { "nombreProducto": "TOMATE", "unidadMedida": "CAJON", "precioProveedor": 290.00, "precioSugerido": 420.00 },
+            { "nombreProducto": "ZANAHORIA", "unidadMedida": "ATADO", "precioProveedor": 40.00, "precioSugerido": 70.00 },
+            { "nombreProducto": "ZAPALLITO", "unidadMedida": "CAJON", "precioProveedor": 200.00, "precioSugerido": 300.00 },
+            { "nombreProducto": "ZAPALLO COREANO", "unidadMedida": "UNIDAD", "precioProveedor": 30.00, "precioSugerido": 50.00 },
+            { "nombreProducto": "ZAPALLO PLOMO", "unidadMedida": "UNIDAD", "precioProveedor": 40.00, "precioSugerido": 60.00 }
+        ]
+    },
+    {
+        "categoria": "FRUTAS Y VERDURAS",
+        "subcategoria": "FRUTAS",
+        "productos": [
+            { "nombreProducto": "FRUTILLA", "unidadMedida": "CAJON", "precioProveedor": 100.00, "precioSugerido": 140.00 },
+            { "nombreProducto": "DURAZON", "unidadMedida": "CAJON", "precioProveedor": 700.00, "precioSugerido": 1200.00 },
+            { "nombreProducto": "BANANA", "unidadMedida": "CAJON", "precioProveedor": 400.00, "precioSugerido": 600.00 },
+            { "nombreProducto": "DAMASCO", "unidadMedida": "CAJON", "precioProveedor": 500.00, "precioSugerido": 800.00 },
+            { "nombreProducto": "LIMON", "unidadMedida": "CAJON", "precioProveedor": 300.00, "precioSugerido": 500.00 },
+            { "nombreProducto": "MANDARINA", "unidadMedida": "CAJON", "precioProveedor": 200.00, "precioSugerido": 400.00 },
+            { "nombreProducto": "MANGO", "unidadMedida": "CAJON", "precioProveedor": 700.00, "precioSugerido": 1000.00 },
+            { "nombreProducto": "MELON", "unidadMedida": "UNIDAD", "precioProveedor": 40.00, "precioSugerido": 80.00 },
+            { "nombreProducto": "NARANJA", "unidadMedida": "CAJON", "precioProveedor": 200.00, "precioSugerido": 400.00 },
+            { "nombreProducto": "PALTA", "unidadMedida": "CAJON", "precioProveedor": 300.00, "precioSugerido": 500.00 },
+            { "nombreProducto": "PERA", "unidadMedida": "CAJON", "precioProveedor": 400.00, "precioSugerido": 700.00 },
+            { "nombreProducto": "POMELO ", "unidadMedida": "CAJON", "precioProveedor": 300.00, "precioSugerido": 500.00 },
+            { "nombreProducto": "SANDIA", "unidadMedida": "UNIDAD", "precioProveedor": 50.00, "precioSugerido": 80.00 },
+            { "nombreProducto": "UVA NEGRA", "unidadMedida": "CAJON", "precioProveedor": 400.00, "precioSugerido": 700.00 },
+            { "nombreProducto": "UVA BLANCA", "unidadMedida": "CAJON", "precioProveedor": 400.00, "precioSugerido": 700.00 },
+            { "nombreProducto": "UVA ROSADA", "unidadMedida": "CAJON", "precioProveedor": 400.00, "precioSugerido": 700.00 },
+            { "nombreProducto": "HIGO NEGRO", "unidadMedida": "CAJON", "precioProveedor": 300.00, "precioSugerido": 500.00 }
+        ]
+    }
+]
