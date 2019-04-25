@@ -25,11 +25,9 @@ app.post('/producto/nuevo_subproducto/', async function(req, res) {
     if (req.body.productos) {
         try {
             for (var i in req.body.productos) {
-                let ppb = Number(req.body.productos[i].precioProveedorBulto);
                 let producto = new SubProducto({
                     nombreProducto: req.body.productos[i].nombreProducto.toUpperCase(),
-                    //precioProveedorBulto: Number(req.body.productos[i].precioProveedorBulto).toFixed(3),
-                    precioProveedorBulto: ppb.toFixed(3),
+                    precioProveedorBulto: Number(req.body.productos[i].precioProveedorBulto).toFixed(3),
                     precioSugeridoBulto: Number(req.body.productos[i].precioSugeridoBulto).toFixed(3),
                     precioProveedorUnidad: Number(req.body.productos[i].precioProveedorUnidad).toFixed(3),
                     precioSugeridoUnidad: Number(req.body.productos[i].precioSugeridoUnidad).toFixed(3),
@@ -154,7 +152,36 @@ app.post('/producto/nuevo_subproducto/', async function(req, res) {
     }
 });
 
+app.get('/subproducto/todos/', function(req, res) {
 
+    SubProducto.find()
+        .exec((err, subProductos) => {
+
+            if (err) {
+                console.log('La consulta de subproductos devolvio un error');
+                console.log(err.message);
+                return res.json({
+                    ok: false,
+                    message: 'La consulta de subproductos devolvio un error',
+                    subProductos: null
+                });
+            }
+            if (subProductos.length == 0) {
+                console.log('No hay sub productos para devolver');
+                return res.json({
+                    ok: false,
+                    message: 'No hay sub productos para devolver',
+                    subProductos: null
+                });
+            }
+
+            res.json({
+                ok: true,
+                message: 'Devolviendo sub productos',
+                subProductos
+            });
+        });
+});
 
 app.post('/producto/nuevo/', async function(req, res) {
     let hoy = new Date();
@@ -165,8 +192,7 @@ app.post('/producto/nuevo/', async function(req, res) {
 
                 let producto = new Producto({
                     nombreProducto: req.body.productos[i].nombreProducto.toUpperCase(),
-                    precioProveedor: req.body.productos[i].precioProveedor,
-                    precioSugerido: req.body.productos[i].precioSugerido,
+                    precioPublico: req.body.productos[i].precioPublico,
                     categoria: req.body.productos[i].categoria.toUpperCase(),
                     subcategoria: req.body.productos[i].subcategoria.toUpperCase(),
                     unidadMedida: req.body.productos[i].unidadMedida.toUpperCase(),
@@ -212,32 +238,21 @@ app.post('/producto/nuevo/', async function(req, res) {
                 } else {
                     producto.codigoProveedor = req.body.productos[i].codigoProveedor;
                 }
+
+                //cargo los subproductos
+                let contadorItems = 0;
+                for (var j in req.body.productos[i].subProductos) {
+                    producto.subProductos.push({
+                        subProducto: req.body.productos[i].subProductos[j].subProducto,
+                        cantidad: req.body.productos[i].subProductos[j].cantidad
+                    });
+                    contadorItems++;
+                }
+                producto.cantidadSubProductos = contadorItems;
                 productos_.push(producto._id);
 
-                //guardo la historia del precio
-                // console.log('Estoy por guardar la historia del precio proveedor');
-                // console.log('Producto a guardar el precio: ' + req.body.productos[i].nombreProducto);
-                // console.log('Precio a guardar: ' + req.body.productos[i].precioProveedor);
-                let historiaCambioPrecioProveedor = new HistoriaPrecioProveedor({
-                    precio: req.body.productos[i].precioProveedor
-                });
-
-                historiaCambioPrecioProveedor.save();
-                producto.historialPrecioProveedor.push(historiaCambioPrecioProveedor._id);
-
-                //guardo la historia de cambio de precio sugerido
-                if (req.body.productos[i].precioSugerido) {
-                    let historiaCambioPrecioSugerido = new HistoriaPrecioSugerido({
-                        precio: req.body.productos[i].precioSugerido
-                    });
-
-                    producto.historiaPrecioSugerido.push(historiaCambioPrecioSugerido._id);
-                    historiaCambioPrecioSugerido.save();
-                }
-
-
                 producto.save();
-                Proveedor.findOneAndUpdate({ _id: req.body.idProveedor }, { $push: { productos_: producto._id } },
+                Proveedor.findOneAndUpdate({ _id: req.body.idProveedor }, { $push: { productos: producto._id } },
                     function(err, ok) {
                         if (err) {
                             console.log('La insercion del producto en el proveedor arrojo un error');

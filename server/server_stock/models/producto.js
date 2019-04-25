@@ -16,12 +16,12 @@ let productoSchema = new Schema({
             type: String,
             default: '-'
         },
-        precioProveedor: {
+        precioPublico: {
             type: Number,
             required: true,
             default: 0
         },
-        precioSugerido: {
+        cantidadSubProductos: {
             type: Number,
             default: 0
         },
@@ -30,10 +30,6 @@ let productoSchema = new Schema({
             default: true
         },
         fechaAlta: {
-            type: Date,
-            default: Date.now
-        },
-        fechaUltimaModificacion: {
             type: Date,
             default: Date.now
         },
@@ -61,24 +57,18 @@ let productoSchema = new Schema({
             type: Number,
             defaul: 100000000
         },
-        historialPrecioProveedor: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Historia_Cambio_Precio_Proveedor'
-        }],
-        historiaPrecioSugerido: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Historia_Cambio_Precio_Sugerido'
-        }],
         empaque: {
             type: String
         },
-        unidadesPorEmpaque: {
-            type: Number,
-            default: 0
-        },
         subProductos: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'SubProducto'
+            subPoducto: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'SubProducto'
+            },
+            cantidad: {
+                type: Number,
+                defaul: 0
+            }
         }]
     }
 

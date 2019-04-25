@@ -36,9 +36,13 @@ let proveedorSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Proveedor'
     }],
-    productos: [{
+    subProductos: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SubProducto'
+    }],
+    productos: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Producto'
     }],
     cargoConfiguracion: {
         type: Boolean,
