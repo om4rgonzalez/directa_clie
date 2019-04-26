@@ -11,14 +11,14 @@ let detallePedidoSchema = new Schema({
         nombreProducto: {
             type: String
         },
-        precioProveedor: {
+        precioVenta: {
             type: Number,
             default: 0
         },
-        // precioSugerido: {
-        //     type: Number,
-        //     default: 0
-        // },
+        preferencias: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Preferencia'
+        }],
         empaque: {
             type: String
         },

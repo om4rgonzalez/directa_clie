@@ -61,7 +61,7 @@ let productoSchema = new Schema({
             type: String
         },
         subProductos: [{
-            subPoducto: {
+            subProducto: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'SubProducto'
             },
