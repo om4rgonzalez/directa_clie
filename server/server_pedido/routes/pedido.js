@@ -70,7 +70,8 @@ app.post('/pedido/nuevo/', async function(req, res) {
                 pisoEntrega: req.body.pedidos[p].pisoEntrega,
                 departamentoEntrega: req.body.pedidos[p].departamentoEntrega,
                 ordenEntrega: req.body.pedidos[p].ordenEntrega,
-                horarioEntrega: req.body.pedidos[p].horarioEntrega
+                horarioEntrega: req.body.pedidos[p].horarioEntrega,
+                notaPicking: req.body.pedidos[p].notaPicking
             });
             // if (req.body.tipoEntrega == 'ENVIO A DOMICILIO') {
             //     pedido.costoEntrega = req.body.costoEnvio;
@@ -109,6 +110,7 @@ app.get('/pedidos/listar_pedidos_proveedor/', async function(req, res) {
         ' montoTotalPedido' +
         ' apellidoCliente' +
         ' nombreCliente' +
+        ' notaPicking' +
         ' localidadEntrega' +
         ' barrioEntrega' +
         ' calleEntrega' +

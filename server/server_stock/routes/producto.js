@@ -152,6 +152,132 @@ app.post('/producto/nuevo_subproducto/', async function(req, res) {
     }
 });
 
+
+app.post('/subproducto/actualizar/', async function(req, res) {
+    let hoy = new Date();
+    if (req.body.productos) {
+        for (var i in req.body.productos) {
+            let update = {};
+            let historiaCambioPrecioProveedorBulto = new HistoriaPrecioProveedorBulto({
+                precio: Number(req.body.productos[i].precioProveedorBulto).toFixed(3)
+            });
+            let historiaCambioPrecioProveedorUnidad = new HistoriaPrecioProveedorUnidad({
+                precio: Number(req.body.productos[i].precioProveedorUnidad).toFixed(3)
+            });
+
+            historiaCambioPrecioProveedorBulto.save();
+            historiaCambioPrecioProveedorUnidad.save();
+
+            if (req.body.productos[i].precioSugeridoBulto) {
+                let historiaCambioPrecioSugeridoBulto = new HistoriaPrecioSugeridoBulto({
+                    precio: Number(req.body.productos[i].precioSugeridoBulto).toFixed(3)
+                });
+                let historiaCambioPrecioSugeridoUnidad = new HistoriaPrecioSugeridoUnidad({
+                    precio: Number(req.body.productos[i].precioSugeridoUnidad).toFixed(3)
+                });
+
+                historiaCambioPrecioSugeridoBulto.save();
+                historiaCambioPrecioSugeridoUnidad.save();
+                // Producto.findOneAndUpdate({codigoProveedor: req.body.productos[i].codigoProveedor})
+
+                // Producto.findByIdAndUpdate(req.body.productos[i].codigoProveedor, {
+                SubProducto.findOneAndUpdate({ codigoProveedor: req.body.productos[i].codigoProveedor }, {
+                        $push: {
+                            historialPrecioProveedorBulto: historiaCambioPrecioProveedorBulto._id,
+                            historialPrecioProveedorUnidad: historiaCambioPrecioProveedorUnidad._id,
+                            historiaPrecioSugeridoBulto: historiaCambioPrecioSugeridoBulto._id,
+                            historiaPrecioSugeridoUnidad: historiaCambioPrecioSugeridoUnidad._id
+                        },
+                        $set: {
+                            precioProveedorBulto: Number(req.body.productos[i].precioProveedorBulto).toFixed(3),
+                            precioSugeridoBulto: Number(req.body.productos[i].precioSugeridoBulto).toFixed(3),
+                            precioProveedorUnidad: Number(req.body.productos[i].precioProveedorUnidad).toFixed(3),
+                            precioSugeridoUnidad: Number(req.body.productos[i].precioSugeridoUnidad).toFixed(3)
+                        }
+                    },
+                    async function(err, success) {
+                        if (err) {
+                            console.log(hoy + ' La funcion de actualizacion del precio proveedor devolvio un error');
+                            console.log(hoy + ' ' + err.message);
+                            return res.json({
+                                ok: false,
+                                message: 'La funcion de actualizacion del precio proveedor devolvio un error'
+                            });
+                        }
+                        console.log(hoy + ' Se agregaron los items de historial de precios');
+                    });
+            } else {
+                // Producto.findByIdAndUpdate(req.body.productos[i].codigoProveedor, {
+                SubProducto.findOneAndUpdate({ codigoProveedor: req.body.productos[i].codigoProveedor }, {
+                        $push: {
+                            historialPrecioProveedorBulto: historiaCambioPrecioProveedorBulto._id,
+                            historialPrecioProveedorUnidad: historiaCambioPrecioProveedorUnidad._id,
+                        },
+                        $set: {
+                            precioProveedorBulto: Number(req.body.productos[i].precioProveedorBulto).toFixed(3),
+                            precioSugeridoBulto: Number(req.body.productos[i].precioSugeridoBulto).toFixed(3),
+                        }
+                    },
+                    async function(err, success) {
+                        if (err) {
+                            console.log(hoy + ' La funcion de actualizacion del precio proveedor devolvio un error');
+                            console.log(hoy + ' ' + err.message);
+                            return res.json({
+                                ok: false,
+                                message: 'La funcion de actualizacion del precio proveedor devolvio un error'
+                            });
+                        }
+                        console.log(hoy + ' Se termino la actualizacion del precio proveedor');
+                    });
+            }
+
+            //verifico si se deben actualizar el resto de los campos
+
+            if (req.body.productos[i].nombreProducto) {
+                update.nombreProducto = req.body.productos[i].nombreProducto.toUpperCase();
+            }
+            if (req.body.productos[i].categoria) {
+                update.categoria = req.body.productos[i].categoria.toUpperCase();
+            }
+            if (req.body.productos[i].subcategoria) {
+                update.subcategoria = req.body.productos[i].subcategoria.toUpperCase();
+            }
+            if (req.body.productos[i].stock) {
+                update.stock = req.body.productos[i].stock;
+            }
+            // if (req.body.productos[i].unidadMedida) {
+            //     update.unidadMedida = req.body.productos[i].unidadMedida.toUpperCase();
+            // }
+            if (req.body.productos[i].nuevoCodigoProveedor) {
+                update.codigoProveedor = req.body.productos[i].nuevoCodigoProveedor;
+            }
+
+            if (update.lenght != 0) {
+                // Producto.findByIdAndUpdate(req.body.productos[i].codigoProveedor, update, { new: true }, (err, success) => {
+                SubProducto.findOneAndUpdate({ codigoProveedor: req.body.productos[i].codigoProveedor }, update, { new: true }, (err, success) => {
+                    if (err) {
+                        console.log(hoy + ' La funcion de actualizacion de producto devolvio un error');
+                        console.log(hoy + ' ' + err.message);
+                        return res.json({
+                            ok: false,
+                            message: 'La funcion de actualizacion de producto devolvio un error'
+                        });
+                    }
+
+                    console.log(hoy + ' La actualizacion de datos del producto finalizo correctamente');
+                });
+            }
+            i++;
+        }
+        console.log(hoy + ' El proceso de actualizacion finalizo');
+        res.json({
+            ok: true,
+            message: 'La actualizacion termino correctamente'
+        });
+    }
+});
+
+
 app.get('/subproducto/todos/', function(req, res) {
 
     SubProducto.find()
@@ -282,9 +408,7 @@ app.post('/producto/nuevo/', async function(req, res) {
 });
 
 
-app.get('/producto/obtener_tipos_empaque/', async function(req, res) {
-    res.json(Empaques);
-})
+
 
 app.post('/producto/cargar_imagenes/', async function(req, res) {
     let hoy = new Date();

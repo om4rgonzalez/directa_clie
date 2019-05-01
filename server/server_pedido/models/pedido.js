@@ -102,6 +102,10 @@ let pedidoSchema = new Schema({
     horarioEntrega: {
         type: String,
         default: 'de 8 a 13'
+    },
+    notaPicking: {
+        type: String,
+        default: '-|'
     }
 });
 
