@@ -235,7 +235,7 @@ app.get('/proveedor/obtener_productos/', async function(req, res) {
 
 //En este metodo debo contemplar que el proveedor tenga cobertura en la zona del comercio
 app.get('/proveedor/listar_todos/', async function(req, res) {
-
+    console.log('Listando los proveedores');
     Proveedor.find({}, 'tiposEntrega entidad _id')
         .populate({ path: 'entidad', populate: { path: 'domicilio' } })
         .populate('contactos')
@@ -249,6 +249,15 @@ app.get('/proveedor/listar_todos/', async function(req, res) {
             }
 
             if (!proveedorDB) {
+                return res.json({
+                    ok: false,
+                    err: {
+                        message: 'No hay proveedores para mostrar'
+                    }
+                });
+            }
+
+            if (proveedorDB == null) {
                 return res.json({
                     ok: false,
                     err: {
