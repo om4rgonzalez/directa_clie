@@ -256,64 +256,11 @@ app.get('/proveedor/listar_todos/', async function(req, res) {
                     }
                 });
             }
-            let proveedores = [];
-            // console.log('Comercio a buscar: ' + req.query.idComercio);
-            Comercio.find({ '_id': req.query.idComercio })
-                .exec((err2, comercios) => {
-                    if (err2) {
-                        console.log('La busqueda de comercio devolvio un error. Error: ' + err2.message);
-                        return res.json({
-                            ok: false,
-                            message: 'La busqueda de comercio devolvio un error. Error: ' + err2.message
-                        });
-                    }
+            return res.json({
+                ok: true,
+                proveedorDB
+            });
 
-                    if (!comercios) {
-                        console.log('No hay resultados');
-                        return res.json({
-                            ok: false,
-                            message: 'El id no pertenece a un comercio activo'
-                        });
-                    }
-
-                    if (comercios.length == 0) {
-                        console.log('No hay resultados');
-                        return res.json({
-                            ok: false,
-                            message: 'El id no pertenece a un comercio activo'
-                        });
-                    }
-                    // console.log('Comercio encontrado');
-                    // console.log(comerci=os);
-                    let cantidadProveedor = proveedorDB.length;
-                    let i = 0;
-                    while (i < cantidadProveedor) {
-                        let agregar = true;
-                        let cantidadRedComercio = comercios[0].proveedores.length;
-                        let j = 0;
-                        while (j < cantidadRedComercio) {
-                            // console.log('id a comparar');
-                            // console.log('resultado de proveedores: ' + proveedorDB[i]._id);
-                            // console.log('cantidad caracteres: ' + proveedorDB[i]._id.length)
-                            // console.log('resultado en la lista del comercio: ' + comercios[0].proveedores[j]._id);
-                            // console.log('cantidad caracteres: ' + comercios[0].proveedores[j]._id.length)
-                            if (proveedorDB[i]._id.toString() == comercios[0].proveedores[j]._id.toString()) {
-                                // console.log('Agregar ahora vale false');
-                                agregar = false;
-                            }
-                            j++;
-                        }
-                        // console.log('El while devolvio ' + agregar);
-                        if (agregar)
-                            proveedores.push(proveedorDB[i]);
-                        i++;
-                    }
-                    return res.json({
-                        ok: true,
-                        proveedores
-                    });
-
-                });
         });
 });
 
