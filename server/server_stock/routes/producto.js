@@ -122,7 +122,7 @@ app.post('/producto/nuevo_subproducto/', async function(req, res) {
                         });
                     }
                 });
-                Proveedor.findOneAndUpdate({ _id: req.body.idProveedor }, { $push: { productos: producto._id } },
+                Proveedor.findOneAndUpdate({ _id: req.body.idProveedor }, { $push: { subProductos: producto._id } },
                     function(err, ok) {
                         if (err) {
                             console.log('La insercion del producto en el proveedor arrojo un error');
