@@ -407,6 +407,49 @@ app.post('/producto/nuevo/', async function(req, res) {
     }
 });
 
+app.get('/producto/obtener_productos/', async function(req, res) {
+    let hoy = new Date();
+    Proveedor.findOne({ '_id': req.query.idProveedor })
+        //.populate('productos_')
+        .populate({ path: 'productos', populate: { path: 'subProductos', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
+        // .select('')
+        .exec((err, proveedorDB) => {
+            if (err) {
+                console.log(hoy + ' La busqueda de productos devolvio un error');
+                console.log(hoy + ' ' + err.message);
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de productos devolvio un error',
+                    // categorias: null,
+                    productos: null
+                });
+            }
+
+            if (!proveedorDB) {
+                if (proveedorDB.productos.lenght == 0) {
+                    console.log(hoy + ' El proveedor no tiene cargado productos');
+                    return res.json({
+                        ok: false,
+                        message: 'El proveedor no tiene cargado productos',
+                        // categorias: null,
+                        productos: null
+
+                    });
+                }
+
+            }
+
+
+
+            let productos = proveedorDB.productos;
+            return res.json({
+                ok: true,
+                productos
+            });
+
+        });
+});
+
 
 
 
@@ -555,48 +598,7 @@ app.post('/producto/actualizar/', async function(req, res) {
     }
 });
 
-app.get('/producto/obtener_productos/', async function(req, res) {
-    let hoy = new Date();
-    Proveedor.findOne({ '_id': req.query.idProveedor })
-        //.populate('productos_')
-        .populate({ path: 'productos', populate: { path: 'subProductos', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
-        // .select('')
-        .exec((err, proveedorDB) => {
-            if (err) {
-                console.log(hoy + ' La busqueda de productos devolvio un error');
-                console.log(hoy + ' ' + err.message);
-                return res.json({
-                    ok: false,
-                    message: 'La busqueda de productos devolvio un error',
-                    // categorias: null,
-                    productos: null
-                });
-            }
 
-            if (!proveedorDB) {
-                if (proveedorDB.productos.lenght == 0) {
-                    console.log(hoy + ' El proveedor no tiene cargado productos');
-                    return res.json({
-                        ok: false,
-                        message: 'El proveedor no tiene cargado productos',
-                        // categorias: null,
-                        productos: null
-
-                    });
-                }
-
-            }
-
-
-
-            let productos = proveedorDB.productos;
-            return res.json({
-                ok: true,
-                productos
-            });
-
-        });
-});
 
 
 app.post('/producto/reducir_stock/', async function(req, res) {
