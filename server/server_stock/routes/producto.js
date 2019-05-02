@@ -411,7 +411,7 @@ app.get('/producto/obtener_productos/', async function(req, res) {
     let hoy = new Date();
     Proveedor.findOne({ '_id': req.query.idProveedor })
         //.populate('productos_')
-        .populate({ path: 'productos', populate: { path: 'subProductos', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
+        .populate({ path: 'productos', populate: { path: 'subProductos.subProducto', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
         // .select('')
         .exec((err, proveedorDB) => {
             if (err) {
