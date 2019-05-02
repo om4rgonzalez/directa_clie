@@ -558,8 +558,8 @@ app.post('/producto/actualizar/', async function(req, res) {
 app.get('/producto/obtener_productos/', async function(req, res) {
     let hoy = new Date();
     Proveedor.findOne({ '_id': req.query.idProveedor })
-        .populate('productos_')
-        .populate({ path: 'productos_', select: '_id precioProveedor precioSugerido categoria subcategoria imagenes videos nombreProducto codigoProveedor stock empaque unidadesPorEmpaque unidadMedida' })
+        //.populate('productos_')
+        .populate({ path: 'productos', populate: { path: 'subProductos', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
         // .select('')
         .exec((err, proveedorDB) => {
             if (err) {
@@ -574,7 +574,7 @@ app.get('/producto/obtener_productos/', async function(req, res) {
             }
 
             if (!proveedorDB) {
-                if (proveedorDB.productos_.lenght == 0) {
+                if (proveedorDB.productos.lenght == 0) {
                     console.log(hoy + ' El proveedor no tiene cargado productos');
                     return res.json({
                         ok: false,
@@ -589,7 +589,7 @@ app.get('/producto/obtener_productos/', async function(req, res) {
 
 
 
-            let productos = proveedorDB.productos_;
+            let productos = proveedorDB.productos;
             return res.json({
                 ok: true,
                 productos
