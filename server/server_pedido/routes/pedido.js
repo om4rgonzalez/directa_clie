@@ -521,10 +521,6 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                                     cantidad: 1,
                                     conPreferencias: tienePreferencias
                                 });
-                            } else {
-                                // console.log('El indice del vector productos vale ' + indice);;
-                                // console.log(productos[indice])
-                                productos[indice].cantidad = productos[indice].cantidad + 1;
                             }
                         }
                     }
