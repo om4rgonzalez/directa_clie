@@ -564,6 +564,16 @@ let devolverPeriodosDeEntrega = async(idProveedor) => {
     return resp.data;
 };
 
+let buscarProductoPorId = async(idProducto) => {
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/producto/obtener_producto/';
+    // console.log('URL de acceso a nuevo mensaje: ' + URL);
+    let resp = await axios.post(URL, {
+        idProducto: idProducto
+    });
+
+    return resp.data;
+};
+
 module.exports = {
     nuevoDetalle,
     nuevoDomicilio,
@@ -599,5 +609,6 @@ module.exports = {
     obtenerIndice,
     devolverDomicilioComercio,
     verficiarComercioEnCoberturaProveedor,
-    devolverPeriodosDeEntrega
+    devolverPeriodosDeEntrega,
+    buscarProductoPorId
 }

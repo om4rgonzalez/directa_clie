@@ -407,6 +407,37 @@ app.post('/producto/nuevo/', async function(req, res) {
     }
 });
 
+app.post('/producto/obtener_producto/', async function(req, res) {
+
+    Producto.findOne({ _id: req.body.idProducto })
+        .exec(async(err, producto) => {
+            if (err) {
+                console.log('La busqueda de un producto por su id ( ' + req.body.idProducto + ' ) produjo un error');
+                console.log(err.message);
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de un producto por su id produjo un error',
+                    producto: null
+                });
+            }
+
+            if (producto == null) {
+                console.log('La buesqueda de un producto por su id ( ' + req.body.idProducto + ' ) no devolvio resultados');
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de un producto por su id ( ' + req.body.idProducto + ' ) no devolvio resultados',
+                    producto: null
+                });
+            }
+
+            res.json({
+                ok: true,
+                message: 'Devolviendo resultado',
+                producto
+            });
+        });
+});
+
 app.get('/producto/obtener_productos/', async function(req, res) {
     let hoy = new Date();
     Proveedor.findOne({ '_id': req.query.idProveedor })

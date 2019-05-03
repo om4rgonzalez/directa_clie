@@ -24,28 +24,35 @@ app.post('/pedido/nuevo/', async function(req, res) {
             montoTotalPedido = 0.0;
             cantidadProductos = 0;
             for (var i in req.body.pedidos[p].productos) {
-                let detallePedido = new DetallePedido({
-                    producto_: req.body.pedidos[p].productos[i]._id,
-                    nombreProducto: req.body.pedidos[p].productos[i].nombreProducto,
-                    cantidadPedido: req.body.pedidos[p].productos[i].cantidad,
-                    precioVenta: req.body.pedidos[p].productos[i].precioVenta,
-                    empaque: req.body.pedidos[p].productos[i].empaque
-                });
-                cantidadProductos++;
-                if (req.body.pedidos[p].productos[i].preferencias) {
-                    for (var pref in req.body.pedidos[p].productos[i].preferencias) {
-                        let preferencia = new Preferencia({
-                            agrega: req.body.pedidos[p].productos[i].preferencias[pref].agrega,
-                            subProducto: req.body.pedidos[p].productos[i].preferencias[pref].subProducto,
-                            cantidad: req.body.pedidos[p].productos[i].preferencias[pref].cantidad
-                        });
-                        preferencia.save();
-                        detallePedido.preferencias.push(preferencia._id);
+                let productoF = await funciones.buscarProductoPorId(req.body.pedidos[p].productos[i]._id);
+                if (productoF.ok) {
+                    let detallePedido = new DetallePedido({
+                        producto_: req.body.pedidos[p].productos[i]._id,
+                        nombreProducto: productoF.producto.nombreProducto,
+                        //nombreProducto: req.body.pedidos[p].productos[i].nombreProducto,
+                        cantidadPedido: req.body.pedidos[p].productos[i].cantidad,
+                        precioVenta: productoF.producto.precioPublico,
+                        // precioVenta: req.body.pedidos[p].productos[i].precioVenta,
+                        // empaque: req.body.pedidos[p].productos[i].empaque
+                        empaque: productoF.producto.empaque
+                    });
+                    cantidadProductos++;
+                    if (req.body.pedidos[p].productos[i].preferencias) {
+                        for (var pref in req.body.pedidos[p].productos[i].preferencias) {
+                            let preferencia = new Preferencia({
+                                agrega: req.body.pedidos[p].productos[i].preferencias[pref].agrega,
+                                subProducto: req.body.pedidos[p].productos[i].preferencias[pref].subProducto,
+                                cantidad: req.body.pedidos[p].productos[i].preferencias[pref].cantidad
+                            });
+                            preferencia.save();
+                            detallePedido.preferencias.push(preferencia._id);
+                        }
                     }
+                    montoTotalPedido = montoTotalPedido + (req.body.pedidos[p].productos[i].cantidad * req.body.pedidos[p].productos[i].precioVenta);
+                    detallePedido.save();
+                    detalles.push(detallePedido._id);
                 }
-                montoTotalPedido = montoTotalPedido + (req.body.pedidos[p].productos[i].cantidad * req.body.pedidos[p].productos[i].precioVenta);
-                detallePedido.save();
-                detalles.push(detallePedido._id);
+
             }
 
 
