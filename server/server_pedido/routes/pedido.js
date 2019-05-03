@@ -497,8 +497,8 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                         while (v < productos.length) {
                             if (productos[v].nombreProducto.trim() == pedidos[i].detallePedido[j].producto_.nombreProducto.trim()) {
                                 existeNombre = true;
-                                indice = i;
                                 if (productos[v].conPreferencias == tienePreferencias) {
+                                    indice = i;
                                     existePreferencia = true;
                                     productos[v].cantidad = productos[v].cantidad + 1;
                                     break;
