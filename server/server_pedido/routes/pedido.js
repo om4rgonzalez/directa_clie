@@ -48,7 +48,7 @@ app.post('/pedido/nuevo/', async function(req, res) {
                             detallePedido.preferencias.push(preferencia._id);
                         }
                     }
-                    montoTotalPedido = montoTotalPedido + (req.body.pedidos[p].productos[i].cantidad * req.body.pedidos[p].productos[i].precioVenta);
+                    montoTotalPedido = montoTotalPedido + (req.body.pedidos[p].productos[i].cantidad * productoF.producto.precioPublico);
                     detallePedido.save();
                     detalles.push(detallePedido._id);
                 }
