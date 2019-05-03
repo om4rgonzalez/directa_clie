@@ -475,11 +475,16 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                 cantidadDetalles = cantidadDetalles + pedidos[i].detallePedido.length;
                 while (j < h) {
                     let tienePreferencias = false;
+                    let tienePreferenciaString = 'NO';
                     if (pedidos[i].detallePedido[j].preferencias.length > 0) {
                         //tiene preferencias
                         tienePreferencias = true;
-                    } else
+                        tienePreferenciaString = 'NO';
+                    } else {
                         tienePreferencias = false;
+                        tienePreferenciaString = 'SI';
+                    }
+
 
                     // console.log('--------------');
                     // console.log('Mostrando el producto');
@@ -489,7 +494,7 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                         productos.push({
                             nombreProducto: pedidos[i].detallePedido[j].producto_.nombreProducto,
                             cantidad: 1,
-                            conPreferencias: tienePreferencias
+                            conPreferencias: tienePreferenciaString
                         });
                     } else { //verifico que el producto no este ya cargado
                         let v = 0;
@@ -499,7 +504,7 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                         while (v < productos.length) {
                             if (productos[v].nombreProducto.trim() == pedidos[i].detallePedido[j].producto_.nombreProducto.trim()) {
                                 existeNombre = true;
-                                if (productos[v].conPreferencias == tienePreferencias) {
+                                if (productos[v].conPreferencias == tienePreferenciaString) {
                                     indice = v;
                                     existePreferencia = true;
                                     productos[v].cantidad = productos[v].cantidad + 1;
@@ -512,14 +517,14 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                             productos.push({
                                 nombreProducto: pedidos[i].detallePedido[j].producto_.nombreProducto,
                                 cantidad: 1,
-                                conPreferencias: tienePreferencias
+                                conPreferencias: tienePreferenciaString
                             });
                         } else {
                             if (!existePreferencia) {
                                 productos.push({
                                     nombreProducto: pedidos[i].detallePedido[j].producto_.nombreProducto,
                                     cantidad: 1,
-                                    conPreferencias: tienePreferencias
+                                    conPreferencias: tienePreferenciaString
                                 });
                             }
                         }
