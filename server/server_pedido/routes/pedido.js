@@ -10,6 +10,88 @@ const Proveedor = require('../../server_entidades/models/proveedor');
 const Preferencia = require('../../server_stock/models/preferencia');
 
 
+app.post('/pedido/importar/', async function(req, res) {
+
+    if (req.body.pedidos) {
+        let pedidos_ = [];
+        for (var i in req.body.pedidos) {
+            let p = {
+                proveedor: req.body.pedidos[i].proveedor,
+                fechaEntrega: req.body.pedidos[i].fechaEntrega,
+                // detallePedido: detalles,
+                estadoPedido: 'PEDIDO SOLICITADO',
+                comentario: req.body.pedidos[i].comentario,
+                ////////estos campos se deben borrar en el futuro
+                nombreCliente: req.body.pedidos[i].nombreCliente,
+                apellidoCliente: req.body.pedidos[i].apellidoCliente,
+                localidadEntrega: req.body.pedidos[i].localidadEntrega,
+                barrioEntrega: req.body.pedidos[i].barrioEntrega,
+                calleEntrega: req.body.pedidos[i].calleEntrega,
+                numeroCasaEntrega: req.body.pedidos[i].numeroCasaEntrega,
+                ordenEntrega: req.body.pedidos[i].ordenEntrega,
+                horarioEntrega: req.body.pedidos[i].horarioEntrega,
+                notaPicking: req.body.pedidos[i].notaPicking,
+                telefonoCliente: req.body.pedidos[i].telefonoCliente,
+                productos: null
+            };
+            let productos_v = [];
+            let detalle = req.body.pedidos[i].productos.split(';');
+            for (var j in detalle) {
+                let producto_ = detalle[j].split('|');
+                if (producto_.length > 2) {
+                    //tiene preferencias
+                    let preferencias = producto_[2].split(',');
+
+                    let preferencias_ = [];
+                    let r = 0;
+                    for (var q in preferencias) {
+                        let preferencia = {
+                            agrega: false,
+                            subProducto: null,
+                            cantidad: 0
+                        };
+                        let detallePreferencia = preferencias[q].split('#');
+                        if (detallePreferencia[0].toString().trim() == '-')
+                            preferencia.agrega = false;
+                        else
+                            preferencia.agrega = true;
+                        preferencia.subProducto = detallePreferencia[1];
+                        preferencia.cantidad = detallePreferencia[2];
+                        preferencias_.push(preferencia);
+                    }
+                    let producto = {
+                        _id: producto_[0],
+                        cantidad: producto_[1],
+                        preferencias: preferencias_
+                    };
+                    productos_v.push(producto);
+                } else {
+                    let producto = {
+                        _id: producto_[0],
+                        cantidad: producto_[1]
+                    };
+                    productos_v.push(producto);
+                }
+
+            }
+            p.productos = productos_v;
+            pedidos_.push(p);
+
+
+            // console.log(p);
+            // console.log('=====================');
+            // console.log('');
+        }
+        funciones.nuevoPedido_(pedidos_);
+
+        res.json({
+            ok: true,
+            message: 'El proceso de importacion termino correctamente'
+        });
+    }
+});
+
+
 app.post('/pedido/nuevo/', async function(req, res) {
     console.log('Nuevo pedido recibido');
     let hoy = new Date();
@@ -78,7 +160,8 @@ app.post('/pedido/nuevo/', async function(req, res) {
                 departamentoEntrega: req.body.pedidos[p].departamentoEntrega,
                 ordenEntrega: req.body.pedidos[p].ordenEntrega,
                 horarioEntrega: req.body.pedidos[p].horarioEntrega,
-                notaPicking: req.body.pedidos[p].notaPicking
+                notaPicking: req.body.pedidos[p].notaPicking,
+                telefonoCliente: req.body.pedidos[p].telefonoCliente
             });
             // if (req.body.tipoEntrega == 'ENVIO A DOMICILIO') {
             //     pedido.costoEntrega = req.body.costoEnvio;

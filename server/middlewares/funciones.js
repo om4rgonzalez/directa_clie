@@ -574,6 +574,16 @@ let buscarProductoPorId = async(idProducto) => {
     return resp.data;
 };
 
+let nuevoPedido_ = async(pedidos) => {
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/pedido/nuevo/';
+    // console.log('URL de acceso a nuevo mensaje: ' + URL);
+    let resp = await axios.post(URL, {
+        pedidos: pedidos
+    });
+
+    return resp.data;
+};
+
 module.exports = {
     nuevoDetalle,
     nuevoDomicilio,
@@ -610,5 +620,6 @@ module.exports = {
     devolverDomicilioComercio,
     verficiarComercioEnCoberturaProveedor,
     devolverPeriodosDeEntrega,
-    buscarProductoPorId
+    buscarProductoPorId,
+    nuevoPedido_
 }

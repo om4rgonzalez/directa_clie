@@ -105,7 +105,11 @@ let pedidoSchema = new Schema({
     },
     notaPicking: {
         type: String,
-        default: '-|'
+        default: '-'
+    },
+    telefonoCliente: {
+        type: String,
+        default: '-'
     }
 });
 
