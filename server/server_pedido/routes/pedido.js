@@ -440,6 +440,104 @@ app.get('/pedidos/armar_resumen_productos/', async function(req, res) {
             });
         });
 });
+
+
+
+app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
+    Pedido.find({ proveedor: req.query.idProveedor })
+        .populate({ path: 'detallePedido', populate: { path: 'preferencias', populate: { path: 'subProducto' } } })
+        .populate({ path: 'detallePedido', populate: { path: 'producto_', populate: { path: 'subProductos.subProducto' } } })
+        .exec(async(err, pedidos) => {
+            if (err) {
+                console.log('La consulta de pedidos de un proveedor devolvio un error');
+                console.log(err.message);
+                return res.json({
+                    ok: false,
+                    message: 'La consulta de pedidos de un proveedor devolvio un error',
+                    pedidos: null
+                });
+            }
+            if (pedidos.length == 0) {
+                console.log('La consulta de pedidos de un proveedor no devolvio resultados');
+                return res.json({
+                    ok: false,
+                    message: 'La consulta de pedidos de un proveedor no devolvio resultados',
+                    pedidos: null
+                });
+            }
+
+            let i = 0;
+            let productos = [];
+            while (i < pedidos.length) {
+                let j = 0;
+                let h = pedidos[i].detallePedido.length;
+                while (j < h) {
+                    let tienePreferencias = false;
+                    if (pedidos[i].detallePedido[j].preferencias.length > 0) {
+                        //tiene preferencias
+                        tienePreferencias = true;
+                    } else
+                        tienePreferencias = false;
+
+                    // console.log('--------------');
+                    // console.log('Mostrando el producto');
+                    // console.log(pedidos[i].detallePedido[j].producto_);
+                    let k = 0;
+                    if (productos.length == 0) {
+                        productos.push({
+                            nombreProducto: pedidos[i].detallePedido[j].producto_.nombreProducto,
+                            cantidad: 1,
+                            conPreferencias: tienePreferencias
+                        });
+                    } else { //verifico que el producto no este ya cargado
+                        let v = 0;
+                        let indice = 0;
+                        let existeNombre = false;
+                        let existePreferencia = false;
+                        while (v < productos.length) {
+                            if (productos[v].nombreProducto.trim() == pedidos[i].detallePedido[j].producto_.nombreProducto.trim()) {
+                                existeNombre = true;
+                                indice = i;
+                                if (productos[v].conPreferencias == tienePreferencias) {
+                                    existePreferencia = true;
+                                    productos[v].cantidad = productos[v].cantidad + 1;
+                                    break;
+                                }
+                            }
+                            v++;
+                        }
+                        if (!existeNombre) {
+                            productos.push({
+                                nombreProducto: pedidos[i].detallePedido[j].producto_.nombreProducto,
+                                cantidad: 1,
+                                conPreferencias: tienePreferencias
+                            });
+                        } else {
+                            if (!existePreferencia) {
+                                productos.push({
+                                    nombreProducto: pedidos[i].detallePedido[j].producto_.nombreProducto,
+                                    cantidad: 1,
+                                    conPreferencias: tienePreferencias
+                                });
+                            } else {
+                                productos[indice].cantidad = productos[indice].cantidad + 1;
+                            }
+                        }
+                    }
+
+                    j++;
+
+                }
+                i++;
+            }
+
+            res.json({
+                productos
+            });
+
+        });
+
+});
 // app.get('/pedido/listar_pedidos_comercio/', async function(req, res) {
 
 
