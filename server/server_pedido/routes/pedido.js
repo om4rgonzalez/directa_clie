@@ -468,9 +468,11 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
 
             let i = 0;
             let productos = [];
+            let cantidadDetalles = 0;
             while (i < pedidos.length) {
                 let j = 0;
                 let h = pedidos[i].detallePedido.length;
+                cantidadDetalles = cantidadDetalles + pedidos[i].detallePedido.length;
                 while (j < h) {
                     let tienePreferencias = false;
                     if (pedidos[i].detallePedido[j].preferencias.length > 0) {
@@ -520,8 +522,8 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                                     conPreferencias: tienePreferencias
                                 });
                             } else {
-                                console.log('El indice del vector productos vale ' + indice);;
-                                console.log(productos[indice])
+                                // console.log('El indice del vector productos vale ' + indice);;
+                                // console.log(productos[indice])
                                 productos[indice].cantidad = productos[indice].cantidad + 1;
                             }
                         }
@@ -532,7 +534,8 @@ app.get('/pedido/resumen_cantidad_combos/', async function(req, res) {
                 }
                 i++;
             }
-
+            console.log('Cantidad de pedidos: ' + pedidos.length);
+            console.log('Cantidad de detalles: ' + cantidadDetalles);
             res.json({
                 productos
             });
