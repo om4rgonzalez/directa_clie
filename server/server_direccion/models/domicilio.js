@@ -27,20 +27,21 @@ let domicilioSchema = new Schema({
             type: String,
             require: [true, 'El domicilio debe contener el numero de la casa en donde vive la persona']
         },
-        piso: {
-            type: String
-        },
-        numeroDepartamento: {
-            type: String
-        },
         latitud: {
             type: String
         },
         longitud: {
             type: String
         },
+        URLUbicacion: {
+            type: String
+        },
         codigoPostal: {
             type: String
+        },
+        referenciaUbicacion: {
+            type: String,
+            default: '-'
         }
     }
 

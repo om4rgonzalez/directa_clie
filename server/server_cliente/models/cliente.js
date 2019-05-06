@@ -26,8 +26,14 @@ let clienteSchema = new Schema({
         idCliente: {
             type: String
         },
-        plataforma: {
+        plataformaOrigen: {
             type: String
+        },
+        cantidadPedidos: {
+            type: Number
+        },
+        calificacion: {
+            type: Number
         }
     }
 

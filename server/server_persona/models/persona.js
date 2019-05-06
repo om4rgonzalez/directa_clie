@@ -9,19 +9,12 @@ let personaSchema = new Schema({
     },
     dni: {
         type: String
-            // ,
-            // unique: true,
-            // require: [true, 'Debe ingresar el DNI']
     },
     apellidos: {
         type: String
-            // ,
-            // require: [true, 'Debe ingresar el apellido']
     },
     nombres: {
         type: String
-            // ,
-            // require: [true, 'Debe ingresar el nombre']
     },
     fechaAlta: {
         type: Date,
@@ -29,8 +22,6 @@ let personaSchema = new Schema({
     },
     fechaNacimiento: {
         type: Date
-            // ,
-            // require: [true, 'Debe ingresar la fecha de nacimiento']
     },
     domicilio: {
         type: mongoose.Schema.Types.ObjectId,
