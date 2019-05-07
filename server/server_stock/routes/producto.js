@@ -279,7 +279,7 @@ app.post('/subproducto/actualizar/', async function(req, res) {
 
 
 app.get('/subproducto/todos/', function(req, res) {
-
+    console.log('Accediendo al servicio que devuelve todos los subproductos');
     SubProducto.find()
         .exec((err, subProductos) => {
 
