@@ -69,7 +69,10 @@ let productoSchema = new Schema({
                 type: Number,
                 defaul: 0
             }
-        }]
+        }],
+        vigencia: {
+            type: Date
+        }
     }
 
 );

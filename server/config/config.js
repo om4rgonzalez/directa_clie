@@ -14,8 +14,8 @@ if (process.env.NODE_ENV == 'prod') {
     //urlDB = 'mongodb://bitbi:Bintelligence123!@127.0.0.1:27017/zpos';
     urlDB = 'mongodb://localhost:27017/db_directa_clie';
 } else {
-    urlDB = 'mongodb://localhost:27017/db_directa_clie';
-    //urlDB = 'mongodb://sa:Bintelligence123@ds117846.mlab.com:17846/db_directa_clie'
+    // urlDB = 'mongodb://localhost:27017/db_directa_clie';
+    urlDB = 'mongodb://sa:Bintelligence123@ds117846.mlab.com:17846/db_directa_clie'
 }
 
 let urlImagen;
