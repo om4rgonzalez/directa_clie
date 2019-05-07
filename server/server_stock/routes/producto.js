@@ -315,6 +315,7 @@ app.post('/producto/nuevo/', async function(req, res) {
     if (req.body.productos) {
         try {
             for (var i in req.body.productos) {
+                let vigencia = new Date(req.body.productos[i].vigencia);
 
                 let producto = new Producto({
                     nombreProducto: req.body.productos[i].nombreProducto.toUpperCase(),
@@ -324,7 +325,8 @@ app.post('/producto/nuevo/', async function(req, res) {
                     unidadMedida: req.body.productos[i].unidadMedida.toUpperCase(),
                     detalleProducto: req.body.productos[i].detalleProducto,
                     empaque: req.body.productos[i].empaque,
-                    unidadesPorEmpaque: req.body.productos[i].unidadesPorEmpaque
+                    unidadesPorEmpaque: req.body.productos[i].unidadesPorEmpaque,
+                    vigencia: vigencia
                 });
 
                 if (req.body.productos[i].stock == -1) {
@@ -605,6 +607,9 @@ app.post('/producto/actualizar/', async function(req, res) {
             }
             if (req.body.productos[i].codigoProveedor) {
                 update.codigoProveedor = req.body.productos[i].codigoProveedor;
+            }
+            if (req.body.productos[i].vigencia) {
+                update.vigencia = req.body.productos[i].vigencia
             }
 
             Producto.findByIdAndUpdate(req.body.productos[i].idProducto, update, { new: true }, (err, success) => {
