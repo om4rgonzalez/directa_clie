@@ -409,6 +409,94 @@ app.post('/producto/nuevo/', async function(req, res) {
     }
 });
 
+
+//// Metodo que permite obtener todos los productos que se encuentran vigentes a una fecha de entrega
+app.get('/producto/listar_productos_vigentes/', async function(req, res) {
+
+    let hoy = new Date();
+    let fecha = new Date(req.query.fecha);
+    console.log('Parametros recibidos');
+    console.log('idProveedor: ' + req.query.idProveedor);
+    console.log('fecha: ' + req.query.fecha);
+    Proveedor.findOne({ '_id': req.query.idProveedor })
+        //.populate('productos_')
+        .populate({ path: 'productos', populate: { path: 'subProductos.subProducto', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
+        // .select('')
+        .exec((err, proveedorDB) => {
+            if (err) {
+                console.log(hoy + ' La busqueda de productos devolvio un error');
+                console.log(hoy + ' ' + err.message);
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de productos devolvio un error',
+                    // categorias: null,
+                    productos: null
+                });
+            }
+
+            if (proveedorDB == null) {
+                console.log('El proveedor no existe');
+                return res.json({
+                    ok: false,
+                    message: 'El proveedor no existe',
+                    productos: null
+
+                });
+            } else {
+                if (proveedorDB.productos.length == 0) {
+                    console.log(hoy + ' El proveedor no tiene cargado productos');
+                    return res.json({
+                        ok: false,
+                        message: 'El proveedor no tiene cargado productos',
+                        // categorias: null,
+                        productos: null
+
+                    });
+                }
+
+            }
+
+            // console.log('Proveedor');
+            // console.log(proveedorDB);
+
+            let i = 0;
+            let hasta = proveedorDB.productos.length;
+            let productos_ = [];
+            console.log('El proveedor tiene ' + hasta + ' productos');
+            // let dia = await fecha.getDate();
+            // let mes = await fecha.getMonth();
+            // mes++;
+            // if (mes > 12)
+            //     mes = 1;
+
+            // let anio = fecha.getFullYear();
+            // if (dia.toString().length == 1) {
+            //     dia = '0' + dia;
+            // }
+            // if (mes.toString().length == 1) {
+            //     mes = '0' + mes;
+            // }
+            // let fechaNum = anio.toString() + mes.toString() + dia.toString();
+
+            while (i < hasta) {
+
+                // if ((parseInt(req.body.anioInicio + req.body.mesInicio + req.body.diaInicio, 10) <= parseInt(fechaNum, 10)) && (parseInt(anio + mes + dia, 10) <= parseInt(req.body.anioFin + req.body.mesFin + req.body.diaFin, 10)))
+                console.log('FB: ' + fecha);
+                console.log('FV: ' + proveedorDB.productos[i].vigencia);
+                if (proveedorDB.productos[i].vigencia.toString().trim() == fecha.toString().trim()) {
+                    console.log('Las fechas coinciden. Se agrega el producto');
+                    productos_.push(proveedorDB.productos[i]);
+                }
+                i++;
+            }
+            return res.json({
+                ok: true,
+                productos: productos_
+            });
+
+        });
+});
+
 app.post('/producto/obtener_producto/', async function(req, res) {
 
     Producto.findOne({ _id: req.body.idProducto })
