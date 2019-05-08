@@ -7,6 +7,7 @@ const HistoriaPrecioProveedorBulto = require('../models/historiaCambioPrecioProv
 const HistoriaPrecioSugeridoBulto = require('../models/historiaCambioPrecioSugeridoBulto');
 const HistoriaPrecioProveedorUnidad = require('../models/historiaCambioPrecioProveedorUnidad');
 const HistoriaPrecioSugeridoUnidad = require('../models/historiaCambioPrecioSugeridoUnidad');
+const HistoriaCambioPrecioAlPublico = require('../models/historiaCambioPrecioAlPublico');
 const ImagenProducto = require('../models/imagenProducto');
 const VideoProducto = require('../models/videoProducto');
 const fs = require('fs');
@@ -315,6 +316,13 @@ app.post('/producto/nuevo/', async function(req, res) {
     if (req.body.productos) {
         try {
             for (var i in req.body.productos) {
+                //guardo el historial de cambio de precio al publico
+                let historia = new HistoriaCambioPrecioAlPublico({
+                    precio: req.body.productos[i].precioPublico
+                });
+
+                historia.save();
+
                 let vigencia = new Date(req.body.productos[i].vigencia);
 
                 let producto = new Producto({
@@ -328,6 +336,7 @@ app.post('/producto/nuevo/', async function(req, res) {
                     unidadesPorEmpaque: req.body.productos[i].unidadesPorEmpaque,
                     vigencia: vigencia
                 });
+                producto.historiaCambioPrecioAlPublico.push(historia._id);
 
                 if (req.body.productos[i].stock == -1) {
                     producto.stock = 100000000;
@@ -409,15 +418,87 @@ app.post('/producto/nuevo/', async function(req, res) {
     }
 });
 
+app.post('/producto/actualizar/', async function(req, res) {
+    let hoy = new Date();
+    if (req.body.productos) {
+        for (var i in req.body.productos) {
+            let update = {};
+            if (req.body.productos[i].precioPublico) {
+
+                update.precioPublico = req.body.productos[i].precioPublico;
+
+                historiaCambioPrecioAlPublico = new HistoriaCambioPrecioAlPublico({
+                    precio: req.body.productos[i].precioPublico
+                })
+                historiaCambioPrecioAlPublico.save();
+                Producto.findByIdAndUpdate(req.body.productos[i].idProducto, {
+                        $push: {
+                            historiaCambioPrecioAlPublico: historiaCambioPrecioAlPublico._id
+                        }
+                    },
+                    async function(err, success) {
+                        if (err) {
+                            console.log(hoy + ' La funcion de actualizacion del precio proveedor devolvio un error');
+                            console.log(hoy + ' ' + err.message);
+                            return res.json({
+                                ok: false,
+                                message: 'La funcion de actualizacion del precio proveedor devolvio un error'
+                            });
+                        }
+                        console.log(hoy + ' Se termino la actualizacion del precio proveedor');
+                    });
+            }
+
+            if (req.body.productos[i].nombreProducto) {
+                update.nombreProducto = req.body.productos[i].nombreProducto.toUpperCase();
+            }
+            if (req.body.productos[i].categoria) {
+                update.categoria = req.body.productos[i].categoria.toUpperCase();
+            }
+            if (req.body.productos[i].subcategoria) {
+                update.subcategoria = req.body.productos[i].subcategoria.toUpperCase();
+            }
+            if (req.body.productos[i].stock) {
+                update.stock = req.body.productos[i].stock;
+            }
+            if (req.body.productos[i].unidadMedida) {
+                update.unidadMedida = req.body.productos[i].unidadMedida.toUpperCase();
+            }
+            if (req.body.productos[i].codigoProveedor) {
+                update.codigoProveedor = req.body.productos[i].codigoProveedor;
+            }
+            if (req.body.productos[i].vigencia) {
+                update.vigencia = req.body.productos[i].vigencia
+            }
+
+            Producto.findByIdAndUpdate(req.body.productos[i].idProducto, update, { new: true }, (err, success) => {
+                if (err) {
+                    console.log(hoy + ' La funcion de actualizacion de producto devolvio un error');
+                    console.log(hoy + ' ' + err.message);
+                    return res.json({
+                        ok: false,
+                        message: 'La funcion de actualizacion de producto devolvio un error'
+                    });
+                }
+
+                console.log(hoy + ' La actualizacion de datos del producto finalizo correctamente');
+            });
+            i++;
+        }
+        console.log(hoy + ' El proceso de actualizacion finalizo');
+        res.json({
+            ok: true,
+            message: 'La actualizacion termino correctamente'
+        });
+    }
+});
+
 
 //// Metodo que permite obtener todos los productos que se encuentran vigentes a una fecha de entrega
 app.get('/producto/listar_productos_vigentes/', async function(req, res) {
 
     let hoy = new Date();
     let fecha = new Date(req.query.fecha);
-    console.log('Parametros recibidos');
-    console.log('idProveedor: ' + req.query.idProveedor);
-    console.log('fecha: ' + req.query.fecha);
     Proveedor.findOne({ '_id': req.query.idProveedor })
         //.populate('productos_')
         .populate({ path: 'productos', populate: { path: 'subProductos.subProducto', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
@@ -448,39 +529,16 @@ app.get('/producto/listar_productos_vigentes/', async function(req, res) {
                     return res.json({
                         ok: false,
                         message: 'El proveedor no tiene cargado productos',
-                        // categorias: null,
                         productos: null
 
                     });
                 }
 
             }
-
-            // console.log('Proveedor');
-            // console.log(proveedorDB);
-
             let i = 0;
             let hasta = proveedorDB.productos.length;
             let productos_ = [];
-            console.log('El proveedor tiene ' + hasta + ' productos');
-            // let dia = await fecha.getDate();
-            // let mes = await fecha.getMonth();
-            // mes++;
-            // if (mes > 12)
-            //     mes = 1;
-
-            // let anio = fecha.getFullYear();
-            // if (dia.toString().length == 1) {
-            //     dia = '0' + dia;
-            // }
-            // if (mes.toString().length == 1) {
-            //     mes = '0' + mes;
-            // }
-            // let fechaNum = anio.toString() + mes.toString() + dia.toString();
-
             while (i < hasta) {
-
-                // if ((parseInt(req.body.anioInicio + req.body.mesInicio + req.body.diaInicio, 10) <= parseInt(fechaNum, 10)) && (parseInt(anio + mes + dia, 10) <= parseInt(req.body.anioFin + req.body.mesFin + req.body.diaFin, 10)))
                 console.log('FB: ' + fecha);
                 console.log('FV: ' + proveedorDB.productos[i].vigencia);
                 if (proveedorDB.productos[i].vigencia.toString().trim() == fecha.toString().trim()) {
@@ -496,6 +554,8 @@ app.get('/producto/listar_productos_vigentes/', async function(req, res) {
 
         });
 });
+
+
 
 app.post('/producto/obtener_producto/', async function(req, res) {
 

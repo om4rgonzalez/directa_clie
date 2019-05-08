@@ -72,7 +72,11 @@ let productoSchema = new Schema({
         }],
         vigencia: {
             type: Date
-        }
+        },
+        historiaCambioPrecioAlPublico: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Historia_Cambio_Precio_Al_Publico'
+        }]
     }
 
 );
