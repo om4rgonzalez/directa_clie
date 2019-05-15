@@ -82,4 +82,6 @@ let productoSchema = new Schema({
 );
 
 
+
+
 module.exports = mongoose.model('Producto', productoSchema);

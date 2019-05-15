@@ -556,14 +556,51 @@ app.get('/producto/listar_productos_vigentes/', async function(req, res) {
 });
 
 app.post('/producto/buscar/', async function(req, res) {
+    let param = new Object();
 
-    let parametros = 'nombreProducto: acelga';
+    if (req.body.condiciones) {
+        for (var j in req.body.condiciones) {
+            switch (req.body.condiciones[j].campo) {
+                case 'idProveedor':
+                    param.idProveedor = req.body.condiciones[j].valor
+                    break;
+                case 'categoria':
+                    param.categoria = req.body.condiciones[j].valor.toUpperCase();
+                    break;
+                case 'subcategoria':
+                    param.subcategoria = req.body.condiciones[j].valor.toUpperCase();
+                    break;
+                case 'nombreProducto':
+                    param.nombreProducto = req.body.condiciones[j].valor.toUpperCase();
+                    break;
+                case 'codigoProveedor':
+                    param.codigoProveedor = req.body.condiciones[j].valor
+                    break;
+                case 'precioPublico':
+                    param.precioPublico = req.body.condiciones[j].valor
+                    break;
+                case 'vigencia':
+                    param.vigencia = req.body.condiciones[j].valor
+                    break;
+            }
+        }
+    }
 
-    Producto.findOne()
-        .where(parametros)
+    // let parametros = '{subcategoria:\'FRUTAS\'}';
+    // let p = new Object({
+    //     subcategoria: 'VERDURAS',
+    //     precioPublico: 250
+    // });
+    // let p2 = new Object({
+    //     precioPublico: 250
+    // });
+
+    // Producto.find({ parametros })
+    Producto.find(param)
+        // .where({ parametros })
         .exec(async(err, producto) => {
             if (err) {
-                console.log('La busqueda de un producto por su id ( ' + req.body.idProducto + ' ) produjo un error');
+                console.log('La busqueda de un producto por su id ( ' + param + ' ) produjo un error');
                 console.log(err.message);
                 return res.json({
                     ok: false,
@@ -573,13 +610,26 @@ app.post('/producto/buscar/', async function(req, res) {
             }
 
             if (producto == null) {
-                console.log('La buesqueda de un producto por su id ( ' + req.body.idProducto + ' ) no devolvio resultados');
+                console.log('La buesqueda de un producto por su id ( ' + param + ' ) no devolvio resultados');
                 return res.json({
                     ok: false,
-                    message: 'La busqueda de un producto por su id ( ' + req.body.idProducto + ' ) no devolvio resultados',
+                    message: 'La busqueda de un producto por su id ( ' + param + ' ) no devolvio resultados',
                     producto: null
                 });
             }
+
+            if (producto.length == 0) {
+                console.log('La buesqueda de un producto por su id ( ' + param + ' ) no devolvio resultados');
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de un producto por su id ( ' + param + ' ) no devolvio resultados',
+                    producto: null
+                });
+            }
+
+            let productos = [];
+            let i = 0;
+
 
             res.json({
                 ok: true,
@@ -587,6 +637,7 @@ app.post('/producto/buscar/', async function(req, res) {
                 producto
             });
         });
+
 });
 
 
