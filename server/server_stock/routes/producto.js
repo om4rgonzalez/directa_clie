@@ -565,13 +565,13 @@ app.post('/producto/buscar/', async function(req, res) {
                     param.idProveedor = req.body.condiciones[j].valor
                     break;
                 case 'categoria':
-                    param.categoria = req.body.condiciones[j].valor.toUpperCase();
+                    param.categoria = req.body.condiciones[j].valor;
                     break;
                 case 'subcategoria':
-                    param.subcategoria = req.body.condiciones[j].valor.toUpperCase();
+                    param.subcategoria = req.body.condiciones[j].valor;
                     break;
                 case 'nombreProducto':
-                    param.nombreProducto = req.body.condiciones[j].valor.toUpperCase();
+                    param.nombreProducto = req.body.condiciones[j].valor;
                     break;
                 case 'codigoProveedor':
                     param.codigoProveedor = req.body.condiciones[j].valor
@@ -596,6 +596,9 @@ app.post('/producto/buscar/', async function(req, res) {
     // });
 
     // Producto.find({ parametros })
+
+    let p = 'hola';
+    console.log(param);
     Producto.find(param)
         // .where({ parametros })
         .exec(async(err, producto) => {

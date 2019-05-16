@@ -11,11 +11,10 @@ const funciones = require('../../middlewares/funciones');
 
 
 app.post('/cliente/nuevo/', async function(req, res) {
-    let contactoGuardado = true;
-    let avanzar = true;
     var contactos = [];
-
-    if (req.body.persona._id == '0') {
+    let domiciliosEntrega = [];
+    //Valido que el json de entrada tenga todos los datos
+    if (req.body.domicilio && req.body.contactos && req.body.cliente && req.body.persona) {
         try {
             //genero el modelo de domicilio
             if (req.body.domicilio) {
@@ -26,123 +25,109 @@ app.post('/cliente/nuevo/', async function(req, res) {
                     barrio: req.body.domicilio.barrio,
                     calle: req.body.domicilio.calle,
                     numeroCasa: req.body.domicilio.numeroCasa,
-                    piso: req.body.domicilio.piso,
-                    numeroDepartamento: req.body.domicilio.numeroDepartamento,
                     latitud: req.body.domicilio.latitud,
-                    longitud: req.body.domicilio.longitud
+                    longitud: req.body.domicilio.longitud,
+                    URLUbicacion: req.body.domicilio.URLUbicacion,
+                    codigoPostal: req.body.domicilio.codigoPostal,
+                    referenciaUbicacion: req.body.domicilio.referenciaUbicacion
                 });
                 let respDomicilio = await funciones.nuevoDomicilio(domicilio);
 
 
                 if (respDomicilio.ok) {
-                    req.body.persona.domicilio = domicilio._id;
-                    avanzar = true;
-                } else
-                    avanzar = false;
-                //genero el modelo de persona
-            } else {
-                avanzar = false;
-            }
+                    domiciliosEntrega.push(domicilio._id);
 
-            let persona = new Persona({
-                tipoDni: req.body.persona.tipoDni,
-                dni: req.body.persona.dni,
-                apellidos: req.body.persona.apellidos,
-                nombres: req.body.persona.nombres,
-                fechaNacimiento: req.body.persona.fechaNacimiento,
-                // domicilio: domicilio._id
-            });
-            if (avanzar) {
-                persona.domicilio = domicilio._id;
-            } else
-                avanzar = true;
-            try {
-                let respPersona = await funciones.nuevaPersona(persona);
-                if (respPersona.ok)
-                    req.body.persona._id = persona._id;
-                else {
-                    avanzar = false;
-                    return res.status(400).json({
-                        ok: false,
-                        message: 'Error al dar de alta una persona. Dni duplicado'
-                    });
+                    //doy de alta los datos de contacto
+                    for (var i in req.body.contactos) {
+                        // console.log(req.body.contactos[i]);
+                        let contacto = new Contacto({
+                            tipoContacto: req.body.contactos[i].tipoContacto,
+                            codigoPais: req.body.contactos[i].codigoPais,
+                            codigoArea: req.body.contactos[i].codigoArea,
+                            numeroCelular: req.body.contactos[i].numeroCelular,
+                            numeroFijo: req.body.contactos[i].numeroFijo,
+                            email: req.body.contactos[i].email
+                        });
+                        try {
+                            let respuesta = await funciones.nuevoContacto(contacto);
+                            if (respuesta.ok) {
+                                contactos.push(contacto._id);
+                                //doy de alta a la persona
+                                let persona = new Persona({
+                                    tipoDni: req.body.persona.tipoDni,
+                                    dni: req.body.persona.dni,
+                                    apellidos: req.body.persona.apellidos.toUpperCase(),
+                                    nombres: req.body.persona.nombres.toUpperCase(),
+                                    fechaNacimiento: req.body.persona.fechaNacimiento
+                                });
+                                try {
+                                    let respPersona = await funciones.nuevaPersona(persona);
+                                    if (respPersona.ok) {
+                                        let cliente = new Cliente({
+                                            datosPersonales: persona._id,
+                                            idCliente: req.body.cliente.idCliente,
+                                            plataformaUsadaParaAlta: req.body.cliente.plataformaUsadaParaAlta.toUpperCase(),
+                                            puntosEntrega: domiciliosEntrega,
+                                            contactos: contactos,
+                                            calificacion: 0
+                                        });
+                                        cliente.save((err, clienteDB) => {
+                                            if (err) {
+                                                console.log('El alta del cliente arrojo un error');
+                                                console.log('Error: ' + err.message);
+                                                return res.json({
+                                                    ok: false,
+                                                    message: 'El alta del cliente arrojo un error'
+                                                });
+                                            }
+
+
+                                            res.json({
+                                                ok: true,
+                                                message: 'Alta completada'
+                                            });
+                                        });
+                                    } else {
+                                        return res.json({
+                                            ok: false,
+                                            message: 'Error al dar de alta los datos personales'
+                                        });
+                                    }
+                                } catch (e) {
+                                    return res.json({
+                                        ok: false,
+                                        message: 'Error al dar de alta los datos personales'
+                                    });
+                                }
+                            }
+                            // console.log('array de contactos antes de asignarselo al cliente: ' + contactos);
+                        } catch (e) {
+                            console.log('Error al guardar el contacto: ' + contacto);
+                            console.log('Error de guardado: ' + e);
+                            return res.json({
+                                ok: false,
+                                message: 'Se produjo un error al intentar guardar los datos de contacto del cliente'
+                            });
+                        }
+                    }
                 }
-            } catch (e) {
-                avanzar = false;
             }
-
         } catch (e) {
-            avanzar = false;
-        }
-    }
-
-
-    if (avanzar) {
-
-        //la persona ya existe, hay que darle de alta a los contactos y al cliente
-        for (var i in req.body.contactos) {
-            // console.log(req.body.contactos[i]);
-            let contacto = new Contacto({
-                tipoContacto: req.body.contactos[i].tipoContacto,
-                codigoPais: req.body.contactos[i].codigoPais,
-                codigoArea: req.body.contactos[i].codigoArea,
-                numeroCelular: req.body.contactos[i].numeroCelular,
-                numeroFijo: req.body.contactos[i].numeroFijo,
-                email: req.body.contactos[i].email
-            });
-            try {
-                let respuesta = await funciones.nuevoContacto(contacto);
-                if (respuesta.ok) {
-                    contactos.push(contacto._id);
-                }
-
-                // console.log('array de contactos antes de asignarselo al cliente: ' + contactos);
-            } catch (e) {
-                console.log('Error al guardar el contacto: ' + contacto);
-                console.log('Error de guardado: ' + e);
-                contactoGuardado = false;
-            }
-        }
-
-
-        if (contactoGuardado) {
-
-            //por ultimo, doy de alta al cliente
-            // console.log(contactos);
-            let cliente = new Cliente({
-                titular: req.body.persona._id,
-                idCliente: req.body.idCliente,
-                plataforma: req.body.plataforma
-                    // ,tipoCliente: req.body.cliente.tipoCliente
-            });
-            // console.log('estos son los id de contacto que le voy cargar al cliente: ' + contactos);
-            for (var i in contactos) {
-                // console.log('el cliente tiene este contacto: ' + contactos[i]);
-                cliente.contactos.push(contactos[i]);
-            }
-            cliente.save((err, clienteDB) => {
-                if (err) {
-                    return res.json({
-                        ok: false,
-                        err
-                    });
-                }
-
-
-                res.json({
-                    ok: true,
-                    clienteDB
-                });
+            return res.json({
+                ok: false,
+                message: 'Se produjo un error en el proceso de generar un nuevo cliente'
             });
         }
-    } else
-        res.json({
+    } else {
+        //si falta alguno de estos datos no se puede avanzar
+        return res.json({
             ok: false,
-            message: 'No se pudo generar el registro'
+            message: 'Los datos del cliente estan incompletos, debe tener cargado domicilio de entrega, datos de contacto y datos del titular'
         });
+    }
+});
 
-    // }
-})
+
 
 app.post('/cliente/todos/', async function(req, res) {
     Cliente.find()

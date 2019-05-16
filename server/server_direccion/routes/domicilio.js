@@ -19,7 +19,9 @@ app.post('/domicilio/nuevo', function(req, res) {
         numeroDepartamento: objeto.numeroDepartamento,
         latitud: objeto.latitud,
         longitud: objeto.longitud,
-        codigoPostal: objeto.codigoPostal
+        codigoPostal: objeto.codigoPostal,
+        URLUbicacion: objeto.URLUbicacion,
+        referenciaUbicacion: objeto.referenciaUbicacion
     });
 
 
@@ -45,6 +47,8 @@ app.post('/domicilio/nuevo', function(req, res) {
             latitud: objeto.latitud,
             longitud: objeto.longitud,
             codigoPostal: objeto.codigoPostal,
+            URLUbicacion: objeto.URLUbicacion,
+            referenciaUbicacion: objeto.referenciaUbicacion,
             numeroCambio: 1
         });
 

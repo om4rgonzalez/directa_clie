@@ -3,10 +3,14 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let clienteSchema = new Schema({
-        titular: {
+        datosPersonales: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Persona'
         },
+        puntosEntrega: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Domicilio'
+        }],
         contactos: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Contacto'
@@ -26,7 +30,7 @@ let clienteSchema = new Schema({
         idCliente: {
             type: String
         },
-        plataformaOrigen: {
+        plataformaUsadaParaAlta: {
             type: String
         },
         cantidadPedidos: {

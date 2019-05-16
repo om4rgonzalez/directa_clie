@@ -124,7 +124,6 @@ app.post('/persona/nueva/', function(req, res) {
         dni: objeto.dni,
         apellidos: objeto.apellidos,
         nombres: objeto.nombres,
-        domicilio: objeto.domicilio,
         fechaNacimiento: objeto.fechaNacimiento
     });
 

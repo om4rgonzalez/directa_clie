@@ -22,12 +22,7 @@ let personaSchema = new Schema({
     },
     fechaNacimiento: {
         type: Date
-    },
-    domicilio: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Domicilio'
     }
-
 });
 
 // personaSchema.plugin(uniqueValidator, { message: 'El {PATH} ya esta registrado' });
