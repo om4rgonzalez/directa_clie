@@ -584,6 +584,20 @@ let nuevoPedido_ = async(pedidos) => {
     return resp.data;
 };
 
+let nuevoCliente = async(domicilio, contactos, persona, cliente) => {
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/cliente/nuevo/';
+    // console.log('URL de acceso a nuevo mensaje: ' + URL);
+    let resp = await axios.post(URL, {
+        domicilio: domicilio,
+        contactos: contactos,
+        cliente: cliente,
+        persona: persona
+    });
+
+    return resp.data;
+};
+
+
 module.exports = {
     nuevoDetalle,
     nuevoDomicilio,
@@ -621,5 +635,6 @@ module.exports = {
     verficiarComercioEnCoberturaProveedor,
     devolverPeriodosDeEntrega,
     buscarProductoPorId,
-    nuevoPedido_
+    nuevoPedido_,
+    nuevoCliente
 }

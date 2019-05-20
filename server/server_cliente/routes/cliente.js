@@ -9,6 +9,60 @@ const Persona = require('../../server_persona/models/persona');
 const funciones = require('../../middlewares/funciones');
 
 
+app.post('/cliente/importar/', async function(req, res) {
+
+    let personas = [];
+    let direcciones = [];
+    let contactos = [];
+    let clientes = [];
+    for (var i in req.body.clientes) {
+        let d = {
+            pais: req.body.clientes[i].pais,
+            provincia: req.body.clientes[i].provincia,
+            localidad: req.body.clientes[i].localidad,
+            barrio: req.body.clientes[i].barrio,
+            calle: req.body.clientes[i].calle,
+            numeroCasa: req.body.clientes[i].numeroCasa,
+            latitud: req.body.clientes[i].latitud,
+            longitud: req.body.clientes[i].longitud,
+            URLUbicacion: req.body.clientes[i].URLUbicacion,
+            codigoPostal: req.body.clientes[i].codigoPostal,
+            referenciaUbicacion: req.body.clientes[i].referenciaUbicacion
+        };
+        let c = [{
+            tipoContacto: req.body.clientes[i].tipoContacto,
+            codigoPais: req.body.clientes[i].codigoPais,
+            codigoArea: req.body.clientes[i].codigoArea,
+            numeroCelular: req.body.clientes[i].numeroCelular
+        }];
+
+        let p = {
+            tipoDni: 'DNI',
+            dni: req.body.clientes[i].dni,
+            apellidos: req.body.clientes[i].apellidos.toUpperCase(),
+            nombres: req.body.clientes[i].nombres.toUpperCase()
+        };
+
+        let clie = {
+            idCliente: req.body.clientes[i]._id,
+            plataformaUsadaParaAlta: 'PROCESO DE IMPORTACION'
+        };
+        let resp = await funciones.nuevoCliente(d, c, p, clie);
+        if (!resp.ok) {
+            console.log('Algo fallo en el proceso de alta de clientes');
+            return res.json({
+                ok: false,
+                message: 'Algo fallo en el proceso de importacion de clientes'
+            });
+        }
+    }
+
+    res.json({
+        ok: true,
+        message: 'Proceso terminado exitosamente'
+    });
+});
+
 
 app.post('/cliente/nuevo/', async function(req, res) {
     var contactos = [];
@@ -81,7 +135,7 @@ app.post('/cliente/nuevo/', async function(req, res) {
                                                 });
                                             }
 
-
+                                            console.log('El cliente con dni ' + persona.dni + ' ha sido dado de alta');
                                             res.json({
                                                 ok: true,
                                                 message: 'Alta completada'
@@ -131,9 +185,9 @@ app.post('/cliente/nuevo/', async function(req, res) {
 
 app.post('/cliente/todos/', async function(req, res) {
     Cliente.find()
+        .populate('puntosEntrega')
         .populate('contactos')
-        .populate({ path: 'contactos', populate: { path: 'tipoContacto' } })
-        .populate({ path: 'titular', populate: { path: 'domicilio' } })
+        .populate('datosPersonales')
         .where({ 'estado': true })
         .exec((err, clientes) => {
             if (err) {
@@ -152,9 +206,7 @@ app.post('/cliente/todos/', async function(req, res) {
                 });
             }
 
-            clientes = clientes.filter(function(clientes) {
-                return clientes.titular != null;
-            })
+
 
             return res.json({
                 ok: true,
