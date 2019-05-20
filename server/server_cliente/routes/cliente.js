@@ -12,11 +12,12 @@ const funciones = require('../../middlewares/funciones');
 
 app.post('/cliente/importar/', async function(req, res) {
 
-    let personas = [];
-    let direcciones = [];
-    let contactos = [];
-    let clientes = [];
     for (var i in req.body.clientes) {
+        let b = false;
+
+        if (req.body.clientes[i].latitud && req.body.clientes[i].longitud)
+            b = true;
+
         let d = {
             pais: req.body.clientes[i].pais,
             provincia: req.body.clientes[i].provincia,
@@ -28,8 +29,10 @@ app.post('/cliente/importar/', async function(req, res) {
             longitud: req.body.clientes[i].longitud,
             URLUbicacion: req.body.clientes[i].URLUbicacion,
             codigoPostal: req.body.clientes[i].codigoPostal,
-            referenciaUbicacion: req.body.clientes[i].referenciaUbicacion
+            referenciaUbicacion: req.body.clientes[i].referenciaUbicacion,
+            tieneLatitudLongitud: b
         };
+
         let c = [{
             tipoContacto: req.body.clientes[i].tipoContacto,
             codigoPais: req.body.clientes[i].codigoPais,
@@ -72,6 +75,10 @@ app.post('/cliente/nuevo/', async function(req, res) {
     if (req.body.domicilio && req.body.contactos && req.body.cliente && req.body.persona) {
         try {
             //genero el modelo de domicilio
+            let b = false;
+            if (req.body.domicilio.latitud && req.body.domicilio.longitud)
+                b = true;
+
             if (req.body.domicilio) {
                 let domicilio = new Domicilio({
                     pais: req.body.domicilio.pais,
@@ -84,7 +91,8 @@ app.post('/cliente/nuevo/', async function(req, res) {
                     longitud: req.body.domicilio.longitud,
                     URLUbicacion: req.body.domicilio.URLUbicacion,
                     codigoPostal: req.body.domicilio.codigoPostal,
-                    referenciaUbicacion: req.body.domicilio.referenciaUbicacion
+                    referenciaUbicacion: req.body.domicilio.referenciaUbicacion,
+                    tieneLatitudLongitud: b
                 });
                 let respDomicilio = await funciones.nuevoDomicilio(domicilio);
 
@@ -217,6 +225,71 @@ app.post('/cliente/todos/', async function(req, res) {
             });
 
         });
+});
+
+app.post('/cliente/agregar_punto_entrega/', async function(req, res) {
+
+    let b = false;
+    if (req.body.domicilio.latitud && req.body.domicilio.longitud)
+        b = true;
+
+    let domicilio = new Domicilio({
+        pais: req.body.domicilio.pais,
+        provincia: req.body.domicilio.provincia,
+        localidad: req.body.domicilio.localidad,
+        barrio: req.body.domicilio.barrio,
+        calle: req.body.domicilio.calle,
+        numeroCasa: req.body.domicilio.numeroCasa,
+        latitud: req.body.domicilio.latitud,
+        longitud: req.body.domicilio.longitud,
+        URLUbicacion: req.body.domicilio.URLUbicacion,
+        codigoPostal: req.body.domicilio.codigoPostal,
+        referenciaUbicacion: req.body.domicilio.referenciaUbicacion,
+        tieneLatitudLongitud: b
+    });
+
+    domicilio.save(async(err, dom) => {
+
+        if (err) {
+            console.log('El alta de un punto de entrega arrojo un error');
+            console.log(err.message);
+            return res.json({
+                ok: false,
+                message: 'El alta de un punto de entrega arrojo un error'
+            });
+        }
+
+        //se dio de alta el punto, ahora actualizo al cliente
+
+        Cliente.findByIdAndUpdate({ _id: req.body.cliente._id }, {
+            $push: {
+                puntosEntrega: domicilio._id
+            }
+        }, function(err1, clienteUpdate) {
+            if (err1) {
+                console.log('Fallo el proceso de actualizar el cliente para agregar el punto de entrega. Error: ' + err1.message);
+                return res.json({
+                    ok: false,
+                    message: 'Fallo el proceso de actualizar el cliente para agregar el punto de entrega. Error: ' + err1.message
+                });
+            }
+
+            if (clienteUpdate.length == 0) {
+                console.log('El cliente a actualizar no esta registrado');
+                return res.json({
+                    ok: false,
+                    message: 'El cliente a actualizar no esta registrado'
+                });
+            }
+
+            console.log('Punto de entrega agregado');
+
+            return res.json({
+                ok: true,
+                message: 'Punto de entrega agregado'
+            });
+        });
+    });
 });
 
 app.post('/cliente/buscar_por_dni/', async function(req, res) {

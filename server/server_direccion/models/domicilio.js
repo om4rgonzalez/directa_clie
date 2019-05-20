@@ -42,6 +42,10 @@ let domicilioSchema = new Schema({
         referenciaUbicacion: {
             type: String,
             default: '-'
+        },
+        tieneLatitudLongitud: {
+            type: Boolean,
+            default: false
         }
     }
 

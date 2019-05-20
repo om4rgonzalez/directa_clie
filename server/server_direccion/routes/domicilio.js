@@ -21,7 +21,8 @@ app.post('/domicilio/nuevo', function(req, res) {
         longitud: objeto.longitud,
         codigoPostal: objeto.codigoPostal,
         URLUbicacion: objeto.URLUbicacion,
-        referenciaUbicacion: objeto.referenciaUbicacion
+        referenciaUbicacion: objeto.referenciaUbicacion,
+        tieneLatitudLongitud: objeto.tieneLatitudLongitud
     });
 
 
