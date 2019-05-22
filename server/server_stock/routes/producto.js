@@ -562,20 +562,22 @@ app.post('/producto/escribir_imagen_en_server/', async function(req, res) {
 
         if (err) {
             console.log(hoy + ' La subida del archivo produjo un error: ' + err.message);
-            return {
+            return res.json({
                 ok: false,
                 message: 'La subida del archivo produjo un error',
                 url: null
-            };
+            });
         }
         console.log(hoy + ' La imagen se termino de mover');
-        return {
+        return res.json({
             ok: true,
             message: 'La subida del archivo produjo un error',
             url: 'http://www.bintelligence.net/imagenes_productos/' + req.body.idImagen + '.' + req.body.extension
-        };
+        });
 
     });
+
+
 });
 
 app.post('/producto/cargar_imagenes/', async function(req, res) {
@@ -613,7 +615,10 @@ app.post('/producto/cargar_imagenes/', async function(req, res) {
                 var upload = await funciones.escribirImagenEnServer(target_path, req.body.imagenes[i].imagen, imagenProducto._id, req.body.imagenes[i].extension);
                 if (upload.ok) {
                     //la imagen se escribio sin problemas
+                    console.log('La imagen se guardo en el servidor');
                     imagenProducto.url = upload.url;
+                } else {
+                    console.log('La imagen no se pudo guardar en el servidor');
                 }
             }
             console.log(hoy + ' Se esta por guardar el registro de la imagen');

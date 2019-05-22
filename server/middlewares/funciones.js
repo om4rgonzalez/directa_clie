@@ -598,15 +598,15 @@ let nuevoCliente = async(domicilio, contactos, persona, cliente) => {
 };
 
 let escribirImagenEnServer = async(target_path, imagen, idImagen, extension) => {
-    let URL = process.env.URL_SERVICE + process.env.PORT + 'http://66.97.38.48:3001/producto/escribir_imagen_en_server/';
-    // console.log('URL de acceso a nuevo mensaje: ' + URL);
+    let URL = 'http://66.97.38.48:3001/producto/escribir_imagen_en_server/';
+    console.log('Llamando a la URL: ' + URL);
     let resp = await axios.post(URL, {
         target_path: target_path,
         imagen: imagen,
         idImagen: idImagen,
         extension: extension
     });
-
+    console.log('Devolviendo la respuesta del servidor');
     return resp.data;
 };
 
