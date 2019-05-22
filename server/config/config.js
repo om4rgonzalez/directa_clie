@@ -33,8 +33,10 @@ if (process.env.NODE_ENV == 'prod') {
     urlImagenProducto = '/var/www/html/imagenes_productos/';
     urlImagenProveedor = '/var/www/html/imagenes_proveedor/';
 } else {
-    urlImagenProducto = '/home/marcelo/imagenes_productos/';
-    urlImagenProveedor = '/home/marcelo/imagenes_proveedor/';
+    urlImagenProducto = '/var/www/html/imagenes_productos/';
+    urlImagenProveedor = '/var/www/html/imagenes_proveedor/';
+    // urlImagenProducto = '/home/marcelo/imagenes_productos/';
+    // urlImagenProveedor = '/home/marcelo/imagenes_proveedor/';
 }
 
 process.env.UrlImagen = urlImagen;

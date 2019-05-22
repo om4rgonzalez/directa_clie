@@ -597,6 +597,20 @@ let nuevoCliente = async(domicilio, contactos, persona, cliente) => {
     return resp.data;
 };
 
+let escribirImagenEnServer = async(target_path, imagen, idImagen, extension) => {
+    let URL = process.env.URL_SERVICE + process.env.PORT + 'http://66.97.38.48:3001/producto/escribir_imagen_en_server/';
+    // console.log('URL de acceso a nuevo mensaje: ' + URL);
+    let resp = await axios.post(URL, {
+        target_path: target_path,
+        imagen: imagen,
+        idImagen: idImagen,
+        extension: extension
+    });
+
+    return resp.data;
+};
+
+
 
 module.exports = {
     nuevoDetalle,
@@ -636,5 +650,6 @@ module.exports = {
     devolverPeriodosDeEntrega,
     buscarProductoPorId,
     nuevoPedido_,
-    nuevoCliente
+    nuevoCliente,
+    escribirImagenEnServer
 }

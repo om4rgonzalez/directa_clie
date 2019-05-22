@@ -555,6 +555,105 @@ app.get('/producto/listar_productos_vigentes/', async function(req, res) {
         });
 });
 
+app.post('/producto/escribir_imagen_en_server/', async function(req, res) {
+    let hoy = new Date();
+    fs.writeFile(req.body.target_path, new Buffer(req.body.imagen, "base64"), async function(err) {
+        //Escribimos el archivo
+
+        if (err) {
+            console.log(hoy + ' La subida del archivo produjo un error: ' + err.message);
+            return {
+                ok: false,
+                message: 'La subida del archivo produjo un error',
+                url: null
+            };
+        }
+        console.log(hoy + ' La imagen se termino de mover');
+        return {
+            ok: true,
+            message: 'La subida del archivo produjo un error',
+            url: 'http://www.bintelligence.net/imagenes_productos/' + req.body.idImagen + '.' + req.body.extension
+        };
+
+    });
+});
+
+app.post('/producto/cargar_imagenes/', async function(req, res) {
+    let hoy = new Date();
+    for (var i in req.body.imagenes) {
+        hoy = new Date();
+        let imagenProducto = new ImagenProducto({
+            formato: req.body.imagenes[i].extension
+        });
+
+        if (req.body.imagenes[i].extension == 'png' || req.body.imagenes[i].extension == 'jpg' || req.body.imagenes[i].extension == 'jpeg') {
+            console.log(hoy + ' Paso la validacion de formato de imagen');
+            var target_path = process.env.UrlImagenProducto + imagenProducto._id + '.' + req.body.imagenes[i].extension; // hacia donde subiremos nuestro archivo dentro de nuestro servidor
+            console.log(hoy + ' Path Destino: ' + target_path);
+
+            if (process.env.NODE_ENV == 'prod') {
+
+                await fs.writeFile(target_path, new Buffer(req.body.imagenes[i].imagen, "base64"), async function(err) {
+                    //Escribimos el archivo
+
+                    if (err) {
+                        console.log(hoy + ' La subida del archivo produjo un error: ' + err.message);
+                        return {
+                            ok: false,
+                            message: 'La subida del archivo produjo un error'
+                        };
+                    }
+                    console.log(hoy + ' La imagen se termino de mover');
+                    imagenProducto.url = 'http://www.bintelligence.net/imagenes_productos/' + imagenProducto._id + '.' + req.body.imagenes[i].extension;
+
+                });
+
+            } else {
+                //estoy en testing
+                var upload = await funciones.escribirImagenEnServer(target_path, req.body.imagenes[i].imagen, imagenProducto._id, req.body.imagenes[i].extension);
+                if (upload.ok) {
+                    //la imagen se escribio sin problemas
+                    imagenProducto.url = upload.url;
+                }
+            }
+            console.log(hoy + ' Se esta por guardar el registro de la imagen');
+            imagenProducto.nombre = imagenProducto._id;
+            try {
+                imagenProducto.save((error, imagen_) => {
+                    if (error) {
+                        console.log(hoy + ' El alta de la imagen produjo un error: ' + error.message);
+
+                        return res.json({
+                            ok: false,
+                            message: 'El alta de la publicidad produjo un error: ' + error.message
+                        });
+                    }
+                    console.log(hoy + 'Imagen guardada');
+                    //ahora actualizo el archivo en el producto
+                    Producto.findOneAndUpdate({ _id: req.body.idProducto }, { $push: { imagenes: imagenProducto._id } }, async function(err, ok) {
+                        if (err) {
+                            console.log(hoy + ' Fallo la insercion de la imagen en el producto');
+                            console.log(hoy + ' ' + err.message);
+                            return res.json({
+                                ok: false,
+                                message: 'Fallo la insercion de la imagen en el producto'
+                            });
+                        }
+                    });
+                });
+            } catch (e) {
+                console.log('Salida por el catch: ' + e.message);
+            }
+        }
+    }
+    console.log(hoy + ' Termino el proceso');
+    res.json({
+        ok: true,
+        message: 'Las imagenes se cargaron correctamente'
+    });
+});
+
+
 app.post('/producto/buscar/', async function(req, res) {
     let param = new Object();
 
@@ -722,57 +821,6 @@ app.get('/producto/obtener_productos/', async function(req, res) {
 
 
 
-app.post('/producto/cargar_imagenes/', async function(req, res) {
-    let hoy = new Date();
-    for (var i in req.body.imagenes) {
-        hoy = new Date();
-        let imagenProducto = new ImagenProducto({
-            formato: req.body.imagenes[i].extension
-        });
-
-        if (req.body.imagenes[i].extension == 'png' || req.body.imagenes[i].extension == 'jpg' || req.body.imagenes[i].extension == 'jpeg') {
-            console.log(hoy + ' Paso la validacion de formato de imagen');
-            var target_path = process.env.UrlImagenProducto + imagenProducto._id + '.' + req.body.imagenes[i].extension; // hacia donde subiremos nuestro archivo dentro de nuestro servidor
-            console.log(hoy + ' Path Destino: ' + target_path);
-            await fs.writeFile(target_path, new Buffer(req.body.imagenes[i].imagen, "base64"), async function(err) {
-                //Escribimos el archivo
-
-                if (err) {
-                    console.log(hoy + ' La subida del archivo produjo un error: ' + err.message);
-                    return {
-                        ok: false,
-                        message: 'La subida del archivo produjo un error'
-                    };
-                }
-                console.log(hoy + ' La imagen se termino de mover');
-                imagenProducto.url = 'http://www.bintelligence.net/imagenes_productos/' + imagenProducto._id + '.' + req.body.imagenes[i].extension;
-                imagenProducto.nombre = imagenProducto._id;
-
-                console.log(hoy + ' Se esta por guardar el registro de la imagen');
-                try {
-                    imagenProducto.save((error, imagen_) => {
-                        if (error) {
-                            console.log(hoy + ' El alta de la imagen produjo un error: ' + error.message);
-
-                            return res.json({
-                                ok: false,
-                                message: 'El alta de la publicidad produjo un error: ' + error.message
-                            });
-                        }
-                        console.log(hoy + 'Imagen guardada');
-                    });
-                } catch (e) {
-                    console.log('Salida por el catch: ' + e.message);
-                }
-            });
-        }
-    }
-    console.log(hoy + ' Termino el proceso');
-    res.json({
-        ok: true,
-        message: 'Las imagenes se cargaron correctamente'
-    });
-});
 
 app.post('/producto/actualizar/', async function(req, res) {
     let hoy = new Date();
