@@ -610,6 +610,17 @@ let escribirImagenEnServer = async(target_path, imagen, idImagen, extension) => 
     return resp.data;
 };
 
+let cambiarNombreEnServer = async(imagenNombre, imagenExtension) => {
+    let URL = 'http://66.97.38.48:3001/producto/cambiar_nombre_en_server/';
+    console.log('Llamando a la URL: ' + URL);
+    let resp = await axios.post(URL, {
+        imagenNombre: imagenNombre,
+        imagenExtension: imagenExtension
+    });
+    console.log('Devolviendo la respuesta del servidor');
+    return resp.data;
+};
+
 
 
 module.exports = {
@@ -651,5 +662,6 @@ module.exports = {
     buscarProductoPorId,
     nuevoPedido_,
     nuevoCliente,
-    escribirImagenEnServer
+    escribirImagenEnServer,
+    cambiarNombreEnServer
 }

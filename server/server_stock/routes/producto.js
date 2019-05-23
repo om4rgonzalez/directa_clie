@@ -576,8 +576,25 @@ app.post('/producto/escribir_imagen_en_server/', async function(req, res) {
         });
 
     });
+});
 
+app.post('/producto/cambiar_nombre_en_server/', async function(req, res) {
+    var target_path = process.env.UrlImagenProducto + req.body.imagenNombre + '.' + req.body.imagenExtension;
+    var new_path = process.env.UrlImagenProducto + 'BORRAR_' + req.body.imagenNombre + '.' + req.body.imagenExtension;
+    fs.rename(target_path, new_path, async function(err) {
+        if (err) {
+            console.log('ERROR: ' + err);
+            return res.json({
+                ok: false,
+                message: 'No se pudo renombrar la imagen'
+            });
+        }
 
+        return res.json({
+            ok: true,
+            message: 'Proceso completo'
+        });
+    });
 });
 
 app.post('/producto/cargar_imagenes/', async function(req, res) {
@@ -656,6 +673,84 @@ app.post('/producto/cargar_imagenes/', async function(req, res) {
         ok: true,
         message: 'Las imagenes se cargaron correctamente'
     });
+});
+
+
+app.post('/producto/quitar_imagen/', async function(req, res) {
+
+    if (req.body.imagenes) {
+        for (var i in req.body.imagenes) {
+            Producto.findOneAndUpdate({ _id: req.body.idProducto }, {
+                $pull: {
+                    imagenes: req.body.imagenes[i].idImagen
+                }
+            }, async function(err, ok) {
+                if (err) {
+                    console.log('El proceso de quitar una imagen produjo un error');
+                    console.log(err.message);
+                    return res.json({
+                        ok: false,
+                        message: 'El proceso de quitar una imagen produjo un error'
+                    });
+                }
+
+                if (ok == null) {
+                    console.log('La busqueda de un producto para quitar una imagen no produjo resultados');
+                    return res.json({
+                        ok: false,
+                        message: 'La busqueda de un producto para quitar una imagen no produjo resultados'
+                    });
+                }
+
+                //ya se quito la imagen, ahora tengo que renombrar el archivo para luego borrarlo
+                ImagenProducto.findOne({ _id: req.body.imagenes[i].idImagen })
+                    .exec(async(errB, img) => {
+                        if (errB) {
+                            console.log('La busqueda del archivo a eliminar devolvio un error');
+                            console.log(errB.message);
+                            return res.json({
+                                ok: false,
+                                message: 'La busqueda del archivo a eliminar devolvio un error'
+                            });
+                        }
+
+                        if (img == null) {
+                            console.log('La busqueda del archivo a eliminar no devolvio resultados');
+                            return res.json({
+                                ok: false,
+                                message: 'La busqueda del archivo a eliminar no devolvio resultados'
+                            });
+                        }
+
+                        if (process.env.NODE_ENV == 'prod') {
+                            var target_path = process.env.UrlImagenProducto + img.nombre + '.' + req.body.formato;
+                            var new_path = process.env.UrlImagenProducto + 'BORRAR_' + img.nombre + '.' + req.body.formato;
+                            fs.rename(target_path, new_path, async function(err) {
+                                if (err) {
+                                    console.log('ERROR: ' + err);
+                                    return res.json({
+                                        ok: false,
+                                        message: 'No se pudo renombrar la imagen'
+                                    });
+                                }
+                            });
+                        } else {
+                            funciones.cambiarNombreEnServer(img.nombre, img.formato);
+                        }
+                    });
+            });
+        }
+        return res.json({
+            ok: true,
+            message: 'Proceso finalizado'
+        });
+    }
+
+
+
+
+
+    fs.rename('/path/to/Afghanistan.png', '/path/to/AF.png', function(err) { if (err) console.log('ERROR: ' + err); });
 });
 
 
