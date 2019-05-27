@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 
 let detallePedidoSchema = new Schema({
 
-        producto_: {
+        producto: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Producto'
         },

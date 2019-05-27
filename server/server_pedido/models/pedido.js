@@ -62,55 +62,55 @@ let pedidoSchema = new Schema({
     montoTotalPedido: {
         type: Number,
         default: 0
-    },
-    /////////////campos a eliminar en el futuro
-    apellidoCliente: {
-        type: String,
-        default: '-'
-    },
-    nombreCliente: {
-        type: String,
-        default: '-'
-    },
-    localidadEntrega: {
-        type: String,
-        default: '-'
-    },
-    barrioEntrega: {
-        type: String,
-        default: '-'
-    },
-    calleEntrega: {
-        type: String,
-        default: '-'
-    },
-    numeroCasaEntrega: {
-        type: String,
-        default: '-'
-    },
-    pisoEntrega: {
-        type: String,
-        default: '0'
-    },
-    departamentoEntrega: {
-        type: String,
-        default: '0'
-    },
-    ordenEntrega: {
-        type: Number
-    },
-    horarioEntrega: {
-        type: String,
-        default: 'de 8 a 13'
-    },
-    notaPicking: {
-        type: String,
-        default: '-'
-    },
-    telefonoCliente: {
-        type: String,
-        default: '-'
     }
+    /////////////campos a eliminar en el futuro
+    // apellidoCliente: {
+    //     type: String,
+    //     default: '-'
+    // },
+    // nombreCliente: {
+    //     type: String,
+    //     default: '-'
+    // },
+    // localidadEntrega: {
+    //     type: String,
+    //     default: '-'
+    // },
+    // barrioEntrega: {
+    //     type: String,
+    //     default: '-'
+    // },
+    // calleEntrega: {
+    //     type: String,
+    //     default: '-'
+    // },
+    // numeroCasaEntrega: {
+    //     type: String,
+    //     default: '-'
+    // },
+    // pisoEntrega: {
+    //     type: String,
+    //     default: '0'
+    // },
+    // departamentoEntrega: {
+    //     type: String,
+    //     default: '0'
+    // },
+    // ordenEntrega: {
+    //     type: Number
+    // },
+    // horarioEntrega: {
+    //     type: String,
+    //     default: 'de 8 a 13'
+    // },
+    // notaPicking: {
+    //     type: String,
+    //     default: '-'
+    // },
+    // telefonoCliente: {
+    //     type: String,
+    //     default: '-'
+    // }
 });
 
 
