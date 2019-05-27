@@ -227,6 +227,78 @@ app.post('/cliente/todos/', async function(req, res) {
         });
 });
 
+
+app.post('/cliente/buscar_clientes/', async function(req, res) {
+    //Cliente.find({ $or: [{ 'datosPersonales.apellidos': { $regex: '.*' + req.body.param.toUpperCase() + '.*' } }, { 'datosPersonales.nombres': { $regex: '.*' + req.body.param.toUpperCase() + '.*' } }] })
+    Cliente.find()
+        .populate('puntosEntrega')
+        .populate('contactos')
+        // .populate({
+        //     path: 'datosPersonales',
+        //     match: { apellidos: { $regex: '.*' + req.body.param.toUpperCase() + '.*' } }
+        // })
+        // .populate({
+        //     path: 'datosPersonales',
+        //     match: { nombres: { $regex: '.*' + req.body.param.toUpperCase() + '.*' } }
+        // })
+        .populate('datosPersonales')
+        .populate({
+            path: 'datosPersonales',
+            match: {
+                $or: [{
+                        apellidos: { $regex: '.*' + req.body.param + '.*', $options: 'si' }
+                    },
+                    {
+                        nombres: { $regex: '.*' + req.body.param + '.*', $options: 'si' }
+                    }
+                ]
+            }
+        })
+        .where({ 'estado': true })
+        // .where({ $or: [{ 'datosPersonales.apellidos': { $regex: '.*' + req.body.param.toUpperCase() + '.*' } }, { 'datosPersonales.nombres': { $regex: '.*' + req.body.param.toUpperCase() + '.*' } }] })
+        .exec((err, clientes) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            if (!clientes) {
+                return res.json({
+                    ok: false,
+                    err: {
+                        message: 'No hay clientes'
+                    }
+                });
+            }
+
+            clientes = clientes.filter(function(clientes) {
+                return clientes.datosPersonales != null;
+            });
+
+            if (clientes.length == 0) {
+                console.log('No hay clientes que cumplan con el parametro de busqueda');
+                return res.json({
+                    ok: false,
+                    recordsTotal: clientes.length,
+                    recordsFiltered: clientes.length,
+                    clientes: null
+                });
+            }
+
+
+
+            return res.json({
+                ok: true,
+                recordsTotal: clientes.length,
+                recordsFiltered: clientes.length,
+                clientes
+            });
+
+        });
+});
+
 app.post('/cliente/agregar_punto_entrega/', async function(req, res) {
 
     let b = false;
