@@ -21,6 +21,10 @@ let pedidoSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DetallePedido'
     }],
+    cargosExtras: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'CargoExtra'
+    }],
     activo: {
         type: Boolean,
         default: true

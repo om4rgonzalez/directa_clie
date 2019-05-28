@@ -7,6 +7,9 @@ let cargosExtrasSchema = new Schema({
         item: {
             type: String
         },
+        tipo: {
+            type: String
+        },
         valor: {
             type: Number,
             default: 0

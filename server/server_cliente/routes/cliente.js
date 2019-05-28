@@ -140,26 +140,30 @@ app.post('/cliente/nuevo/', async function(req, res) {
                                                 console.log('Error: ' + err.message);
                                                 return res.json({
                                                     ok: false,
-                                                    message: 'El alta del cliente arrojo un error'
+                                                    message: 'El alta del cliente arrojo un error',
+                                                    idCliente: null
                                                 });
                                             }
 
                                             console.log('El cliente con dni ' + persona.dni + ' ha sido dado de alta');
                                             res.json({
                                                 ok: true,
-                                                message: 'Alta completada'
+                                                message: 'Alta completada',
+                                                idCliente: cliente._id
                                             });
                                         });
                                     } else {
                                         return res.json({
                                             ok: false,
-                                            message: 'Error al dar de alta los datos personales'
+                                            message: 'Error al dar de alta los datos personales',
+                                            idCliente: null
                                         });
                                     }
                                 } catch (e) {
                                     return res.json({
                                         ok: false,
-                                        message: 'Error al dar de alta los datos personales'
+                                        message: 'Error al dar de alta los datos personales',
+                                        idCliente: null
                                     });
                                 }
                             }
@@ -169,7 +173,8 @@ app.post('/cliente/nuevo/', async function(req, res) {
                             console.log('Error de guardado: ' + e);
                             return res.json({
                                 ok: false,
-                                message: 'Se produjo un error al intentar guardar los datos de contacto del cliente'
+                                message: 'Se produjo un error al intentar guardar los datos de contacto del cliente',
+                                idCliente: null
                             });
                         }
                     }
@@ -178,14 +183,16 @@ app.post('/cliente/nuevo/', async function(req, res) {
         } catch (e) {
             return res.json({
                 ok: false,
-                message: 'Se produjo un error en el proceso de generar un nuevo cliente'
+                message: 'Se produjo un error en el proceso de generar un nuevo cliente',
+                idCliente: null
             });
         }
     } else {
         //si falta alguno de estos datos no se puede avanzar
         return res.json({
             ok: false,
-            message: 'Los datos del cliente estan incompletos, debe tener cargado domicilio de entrega, datos de contacto y datos del titular'
+            message: 'Los datos del cliente estan incompletos, debe tener cargado domicilio de entrega, datos de contacto y datos del titular',
+            idCliente: null
         });
     }
 });

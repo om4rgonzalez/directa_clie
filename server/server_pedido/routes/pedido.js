@@ -91,6 +91,27 @@ app.post('/pedido/importar/', async function(req, res) {
     }
 });
 
+app.post('/pedido/analizar_cliente/', async function(req, res) {
+    console.log('Analizando el cliente');
+    let idCliente;
+    if (req.body.cliente.datosPersonales.dni == 0) {
+        //es un nuevo cliente
+        //antes de darle de alta tengo que obtener un nuevo dni
+
+        let cliente = {
+            plataformaUsadaParaAlta: req.body.cliente.plataformaUsadaParaAlta
+        };
+        var vCliente = await funciones.nuevoCliente(req.body.cliente.domicilio, req.body.cliente.contactos, req.body.cliente.datosPersonales, cliente);
+        if (vCliente.ok)
+            idCliente = vCliente.idCliente;
+        else
+            idCliente = null;
+    } else {
+        //el cliente ya existe, busco el id
+
+    }
+});
+
 
 app.post('/pedido/nuevo/', async function(req, res) {
     console.log('Nuevo pedido recibido');
