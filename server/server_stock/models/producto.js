@@ -76,7 +76,11 @@ let productoSchema = new Schema({
     historiaCambioPrecioAlPublico: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Historia_Cambio_Precio_Al_Publico'
-    }]
+    }],
+    proveedores: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Proveedor'
+    }],
 });
 
 

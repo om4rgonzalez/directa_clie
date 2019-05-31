@@ -94,10 +94,8 @@ app.post('/pedido/importar/', async function(req, res) {
 app.post('/pedido/analizar_cliente/', async function(req, res) {
     console.log('Analizando el cliente');
     let idCliente;
-    if (req.body.cliente.datosPersonales.dni == 0) {
+    if (req.body.cliente.id == 0) {
         //es un nuevo cliente
-        //antes de darle de alta tengo que obtener un nuevo dni
-
         let cliente = {
             plataformaUsadaParaAlta: req.body.cliente.plataformaUsadaParaAlta
         };

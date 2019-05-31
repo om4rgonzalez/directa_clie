@@ -622,6 +622,15 @@ let cambiarNombreEnServer = async(imagenNombre, imagenExtension) => {
 };
 
 
+let devolverUltimoDni = async() => {
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/configuraciones/obtener_ultimo_dni/';
+    let resp = await axios.post(URL, {});
+    // console.log('Data que devuelve la respuesta: ');
+    // console.log(resp.data);
+    return resp.data;
+};
+
+
 
 module.exports = {
     nuevoDetalle,
@@ -663,5 +672,6 @@ module.exports = {
     nuevoPedido_,
     nuevoCliente,
     escribirImagenEnServer,
-    cambiarNombreEnServer
+    cambiarNombreEnServer,
+    devolverUltimoDni
 }

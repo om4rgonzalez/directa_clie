@@ -35,7 +35,8 @@ app.post('/conf/conf_init/', function(req, res) {
 
     let configuracion = new Configuracion({
         versionAndroidComercio: '1.0',
-        versionAndroidProveedor: '1.0'
+        versionAndroidProveedor: '1.0',
+        dni: 0
     });
     configuracion.save();
     res.json({
@@ -75,6 +76,64 @@ app.get('/conf/version/', function(req, res) {
             })
 
         });
-})
+});
+
+app.post('/configuraciones/obtener_ultimo_dni/', async function(req, res) {
+    Configuracion.find()
+        .sort(dni)
+        .exec(async(err, configuraciones) => {
+            if (err) {
+                console.log('La busqueda de configuraciones devolvio un error');
+                console.log(err.message);
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de configuraciones devolvio un error.',
+                    dni: null
+                });
+            }
+
+            if (configuraciones.length == 0) {
+                console.log('No hay configuraciones cargadas');
+                return res.json({
+                    ok: false,
+                    message: 'No hay configuraciones cargadas.',
+                    dni: null
+                });
+            }
+
+            let i = 0;
+            let max = 0;
+            let id = "";
+            while (i < configuraciones.length) {
+                if (i == 0) {
+                    max = configuraciones[i].dni;
+                    id = configuraciones[i]._id;
+                } else {
+                    if (configuraciones[i].dni > max) {
+                        max = configuraciones[i].dni;
+                        id = configuraciones[i]._id;
+                    }
+                }
+                i++;
+            }
+            dni++;
+            Configuracion.findOneAndUpdate({ _id: id }, { $set: { dni: dni } }, async function(errU, ok) {
+                if (errU) {
+                    console.log('La actualizacion del nuevo valor de dni devolvio un error.');
+                    console.log(errU.message);
+                    return res.json({
+                        ok: false,
+                        message: 'La actualizacion del nuevo valor de dni devolvio un error.',
+                        dni: null
+                    });
+                }
+            });
+            return res.json({
+                ok: true,
+                message: 'Devolviendo el nuevo DNI',
+                dni: dni
+            });
+        });
+});
 
 module.exports = app;

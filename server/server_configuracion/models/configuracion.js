@@ -8,6 +8,10 @@ let configuracionSchema = new Schema({
         },
         versionAndroidProveedor: {
             type: String
+        },
+        dni: {
+            type: Number,
+            default: 0
         }
     }
 

@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const _ = require('underscore');
 const Persona = require('../models/persona');
+const Conf = require('../../server_configuracion/models/configuracion');
+const funciones = require('../../middlewares/funciones');
 
 //busqueda de persona por dni
 app.get('/persona', function(req, res) {
@@ -126,6 +128,21 @@ app.post('/persona/nueva/', function(req, res) {
         nombres: objeto.nombres,
         fechaNacimiento: objeto.fechaNacimiento
     });
+
+    if (objeto.dni == 0) {
+        //la persona no tiene dni, hay que asignarle uno
+        var re = await funciones.devolverUltimoDni();
+        if (re.ok) {
+            persona.dni = re.dni;
+        } else {
+            //no se puede generar el dni
+            return res.json({
+                ok: false,
+                message: 'La persona debe tener cargado el DNI.',
+                personaDB: null
+            });
+        }
+    }
 
     Persona.find({ dni: objeto.dni })
         .exec(async(err, exito) => {
