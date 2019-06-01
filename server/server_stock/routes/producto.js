@@ -379,17 +379,19 @@ app.post('/producto/nuevo/', async function(req, res) {
 
                 //cargo los subproductos
                 let contadorItems = 0;
+                let sub_ = [];
                 for (var j in req.body.productos[i].subProductos) {
                     producto.subProductos.push({
                         subProducto: req.body.productos[i].subProductos[j].subProducto,
                         cantidad: req.body.productos[i].subProductos[j].cantidad
                     });
+                    sub_.push(req.body.productos[i].subProductos[j].subProducto);
                     contadorItems++;
                 }
                 producto.cantidadSubProductos = contadorItems;
 
                 //cargo los proveedores que intervienen en este producto
-                var proveedores_ = await funciones.devolverProveedores(req.body.productos[i].subProductos);
+                var proveedores_ = await funciones.devolverProveedores(sub_);
                 if (proveedores_.ok) {
                     producto.proveedores = proveedores_.proveedores;
                 }
@@ -428,6 +430,8 @@ app.post('/producto/nuevo/', async function(req, res) {
 
 app.post('/subproducto/devolver_proveedores/', async function(req, res) {
     let proveedores = [];
+    // console.log('sub productos recibidos');
+    // console.log(req.body.subProductos);
     SubProducto.find({ _id: { $in: req.body.subProductos } })
         .exec(async(err, subProductos) => {
 
@@ -452,6 +456,7 @@ app.post('/subproducto/devolver_proveedores/', async function(req, res) {
             let i = 0;
             while (i < subProductos.length) {
                 if (i == 0) {
+                    console.log('Agregando el proveedor ' + subProductos[i].proveedor.toString().trim());
                     proveedores.push(subProductos[i].proveedor.toString().trim());
                 } else {
                     let j = 0;
@@ -469,9 +474,11 @@ app.post('/subproducto/devolver_proveedores/', async function(req, res) {
                 }
                 i++;
             }
+            // console.log('Proveedores a devolver');
+            // console.log(proveedores);
 
             res.json({
-                ok: false,
+                ok: true,
                 message: 'Devolviendo resultados',
                 proveedores: proveedores
             });
