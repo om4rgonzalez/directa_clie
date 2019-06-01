@@ -27,6 +27,7 @@ app.post('/producto/nuevo_subproducto/', async function(req, res) {
         try {
             for (var i in req.body.productos) {
                 let producto = new SubProducto({
+                    proveedor: req.body.idProveedor,
                     nombreProducto: req.body.productos[i].nombreProducto.toUpperCase(),
                     precioProveedorBulto: Number(req.body.productos[i].precioProveedorBulto).toFixed(3),
                     precioSugeridoBulto: Number(req.body.productos[i].precioSugeridoBulto).toFixed(3),
@@ -386,16 +387,23 @@ app.post('/producto/nuevo/', async function(req, res) {
                     contadorItems++;
                 }
                 producto.cantidadSubProductos = contadorItems;
-                productos_.push(producto._id);
+
+                //cargo los proveedores que intervienen en este producto
+                var proveedores_ = await funciones.devolverProveedores(req.body.productos[i].subProductos);
+                if (proveedores_.ok) {
+                    producto.proveedores = proveedores_.proveedores;
+                }
+
+                // productos_.push(producto._id);
 
                 producto.save();
-                Proveedor.findOneAndUpdate({ _id: req.body.idProveedor }, { $push: { productos: producto._id } },
-                    function(err, ok) {
-                        if (err) {
-                            console.log('La insercion del producto en el proveedor arrojo un error');
-                            console.log(err.message);
-                        }
-                    });
+                // Proveedor.findOneAndUpdate({ _id: req.body.idProveedor }, { $push: { productos: producto._id } },
+                //     function(err, ok) {
+                //         if (err) {
+                //             console.log('La insercion del producto en el proveedor arrojo un error');
+                //             console.log(err.message);
+                //         }
+                //     });
             }
         } catch (e) {
             console.log('Salto un error en el catch.');
@@ -416,6 +424,60 @@ app.post('/producto/nuevo/', async function(req, res) {
             error: 'Sin errores'
         });
     }
+});
+
+app.post('/subproducto/devolver_proveedores/', async function(req, res) {
+    let proveedores = [];
+    SubProducto.find({ _id: { $in: req.body.subProductos } })
+        .exec(async(err, subProductos) => {
+
+            if (err) {
+                console.log('La busqueda de subproductos para devolver el array de proveedores produjo un error.');
+                console.log(err.message);
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de subproductos para devolver el array de proveedores produjo un error.',
+                    proveedores: null
+                });
+            }
+
+            if (subProductos.length == 0) {
+                console.log('La busqueda de subproductos para devolver el array de proveedores no arrojo resultados.');
+                return res.json({
+                    ok: false,
+                    message: 'La busqueda de subproductos para devolver el array de proveedores no arrojo resultados.',
+                    proveedores: null
+                });
+            }
+            let i = 0;
+            while (i < subProductos.length) {
+                if (i == 0) {
+                    proveedores.push(subProductos[i].proveedor.toString().trim());
+                } else {
+                    let j = 0;
+                    let existe = false;
+                    while (j < proveedores.length) {
+                        if (subProductos[i].proveedor.toString().trim() == proveedores[j].trim()) {
+                            existe = true;
+                            break;
+                        }
+                        j++;
+                    }
+                    if (!existe) {
+                        proveedores.push(subProductos[i].proveedor.toString().trim());
+                    }
+                }
+                i++;
+            }
+
+            res.json({
+                ok: false,
+                message: 'Devolviendo resultados',
+                proveedores: proveedores
+            });
+        });
+
+
 });
 
 app.post('/producto/actualizar/', async function(req, res) {

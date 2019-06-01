@@ -630,6 +630,17 @@ let devolverUltimoDni = async() => {
     return resp.data;
 };
 
+let devolverProveedores = async(subProductos) => {
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/subproducto/devolver_proveedores/';
+    let resp = await axios.post(URL, {
+        subProductos: subProductos
+    });
+    // console.log('Data que devuelve la respuesta: ');
+    // console.log(resp.data);
+    return resp.data;
+};
+
+
 
 
 module.exports = {
@@ -673,5 +684,6 @@ module.exports = {
     nuevoCliente,
     escribirImagenEnServer,
     cambiarNombreEnServer,
-    devolverUltimoDni
+    devolverUltimoDni,
+    devolverProveedores
 }
