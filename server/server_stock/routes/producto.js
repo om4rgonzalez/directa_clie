@@ -568,11 +568,10 @@ app.get('/producto/listar_productos_vigentes/', async function(req, res) {
 
     let hoy = new Date();
     let fecha = new Date(req.query.fecha);
-    Proveedor.findOne({ '_id': req.query.idProveedor })
-        //.populate('productos_')
-        .populate({ path: 'productos', populate: { path: 'subProductos.subProducto', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
-        // .select('')
-        .exec((err, proveedorDB) => {
+    Producto.find()
+        .populate({ path: 'subProductos.subProducto', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' })
+        .where({ vigencia: { $lte: fecha } })
+        .exec(async(err, productos) => {
             if (err) {
                 console.log(hoy + ' La busqueda de productos devolvio un error');
                 console.log(hoy + ' ' + err.message);
@@ -584,44 +583,57 @@ app.get('/producto/listar_productos_vigentes/', async function(req, res) {
                 });
             }
 
-            if (proveedorDB == null) {
-                console.log('El proveedor no existe');
+            if (productos == null) {
+                console.log('No hay productos');
                 return res.json({
                     ok: false,
-                    message: 'El proveedor no existe',
+                    message: 'No hay productos',
                     productos: null
 
                 });
             } else {
-                if (proveedorDB.productos.length == 0) {
-                    console.log(hoy + ' El proveedor no tiene cargado productos');
+                if (productos.length == 0) {
+                    console.log(hoy + ' No hay productos');
                     return res.json({
                         ok: false,
-                        message: 'El proveedor no tiene cargado productos',
+                        message: 'No hay productos',
                         productos: null
-
                     });
                 }
+            }
 
-            }
-            let i = 0;
-            let hasta = proveedorDB.productos.length;
-            let productos_ = [];
-            while (i < hasta) {
-                console.log('FB: ' + fecha);
-                console.log('FV: ' + proveedorDB.productos[i].vigencia);
-                if (proveedorDB.productos[i].vigencia.toString().trim() == fecha.toString().trim()) {
-                    console.log('Las fechas coinciden. Se agrega el producto');
-                    productos_.push(proveedorDB.productos[i]);
-                }
-                i++;
-            }
-            return res.json({
+            res.json({
                 ok: true,
-                productos: productos_
+                message: 'Devolviendo productos',
+                productos
             });
-
         });
+
+
+    // Proveedor.find()
+    //     //.populate('productos_')
+    //     .populate({ path: 'productos', populate: { path: 'subProductos.subProducto', select: 'nombreProducto precioProveedorBulto precioSugeridoBulto precioProveedorUnidad precioSugeridoUnidad unidadMedida categoria subcategoria empaque unidadesPorEmpaque' } })
+    //     // .select('')
+    //     .exec((err, proveedorDB) => {
+
+    //         let i = 0;
+    //         let hasta = proveedorDB.productos.length;
+    //         let productos_ = [];
+    //         while (i < hasta) {
+    //             console.log('FB: ' + fecha);
+    //             console.log('FV: ' + proveedorDB.productos[i].vigencia);
+    //             if (proveedorDB.productos[i].vigencia.toString().trim() == fecha.toString().trim()) {
+    //                 console.log('Las fechas coinciden. Se agrega el producto');
+    //                 productos_.push(proveedorDB.productos[i]);
+    //             }
+    //             i++;
+    //         }
+    //         return res.json({
+    //             ok: true,
+    //             productos: productos_
+    //         });
+
+    //     });
 });
 
 app.post('/producto/escribir_imagen_en_server/', async function(req, res) {
