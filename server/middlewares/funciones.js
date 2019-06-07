@@ -630,6 +630,28 @@ let devolverUltimoDni = async() => {
     return resp.data;
 };
 
+let analizarCliente = async(cliente) => {
+    let URL = '/pedido/analizar_cliente/';
+    console.log('Llamando a la URL: ' + URL);
+    let resp = await axios.post(URL, {
+        cliente: cliente
+    });
+    console.log('Devolviendo la respuesta del servidor');
+    return resp.data;
+};
+
+let agregarPuntoEntrega = async(domicilio, cliente) => {
+    let URL = '/pedido/analizar_cliente/';
+    console.log('Llamando a la URL: ' + URL);
+    let resp = await axios.post(URL, {
+        domicilio: domicilio,
+        cliente: cliente
+    });
+    console.log('Devolviendo la respuesta del servidor');
+    return resp.data;
+};
+
+
 
 
 module.exports = {
@@ -673,5 +695,7 @@ module.exports = {
     nuevoCliente,
     escribirImagenEnServer,
     cambiarNombreEnServer,
-    devolverUltimoDni
+    devolverUltimoDni,
+    analizarCliente,
+    agregarPuntoEntrega
 }

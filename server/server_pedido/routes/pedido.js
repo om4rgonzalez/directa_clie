@@ -105,9 +105,37 @@ app.post('/pedido/analizar_cliente/', async function(req, res) {
         else
             idCliente = null;
     } else {
-        //el cliente ya existe, busco el id
-
+        //el cliente ya existe, tengo que verificar si es que se esta agregando un nuevo punto de entrega
+        if (req.body.cliente.puntoEntrega._id == 0) {
+            var oPunto = await funciones.agregarPuntoEntrega(req.body.cliente.puntoEntrega, { '_id': req.body.cliente.id });
+            if (oPunto.ok) {
+                req.body.cliente.puntoEntrega._id = oPunto.idPuntoEntrega;
+            }
+        }
+        idCliente = req.body.cliente.id;
     }
+
+    res.json({
+        ok: true,
+        message: 'Devolviendo el id de cliente',
+        idCliente
+    });
+});
+
+app.post('/pedido/nuevo_pedido/', async function(req, res) {
+
+    console.log('Nuevo pedido recibido');
+    console.log('El cliente es nuevo, hay que darle de alta');
+    var oCliente = await funciones.analizarCliente(req.body.cliente);
+    if (oCliente.ok) {
+        req.body.cliente.id = oCliente.idCliente;
+    } else {
+        return res.json({
+            ok: false,
+            message: 'Algo fallo en el proceso de analisis del cliente'
+        });
+    }
+
 });
 
 

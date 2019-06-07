@@ -334,7 +334,8 @@ app.post('/cliente/agregar_punto_entrega/', async function(req, res) {
             console.log(err.message);
             return res.json({
                 ok: false,
-                message: 'El alta de un punto de entrega arrojo un error'
+                message: 'El alta de un punto de entrega arrojo un error',
+                idPuntoEntrega: null
             });
         }
 
@@ -349,7 +350,8 @@ app.post('/cliente/agregar_punto_entrega/', async function(req, res) {
                 console.log('Fallo el proceso de actualizar el cliente para agregar el punto de entrega. Error: ' + err1.message);
                 return res.json({
                     ok: false,
-                    message: 'Fallo el proceso de actualizar el cliente para agregar el punto de entrega. Error: ' + err1.message
+                    message: 'Fallo el proceso de actualizar el cliente para agregar el punto de entrega. Error: ' + err1.message,
+                    idPuntoEntrega: null
                 });
             }
 
@@ -357,7 +359,8 @@ app.post('/cliente/agregar_punto_entrega/', async function(req, res) {
                 console.log('El cliente a actualizar no esta registrado');
                 return res.json({
                     ok: false,
-                    message: 'El cliente a actualizar no esta registrado'
+                    message: 'El cliente a actualizar no esta registrado',
+                    idPuntoEntrega: null
                 });
             }
 
@@ -365,7 +368,8 @@ app.post('/cliente/agregar_punto_entrega/', async function(req, res) {
 
             return res.json({
                 ok: true,
-                message: 'Punto de entrega agregado'
+                message: 'Punto de entrega agregado',
+                idPuntoEntrega: domicilio._id
             });
         });
     });
