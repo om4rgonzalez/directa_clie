@@ -648,6 +648,15 @@ let agregarPuntoEntrega = async(domicilio, cliente) => {
         cliente: cliente
     });
     console.log('Devolviendo la respuesta del servidor');
+};
+
+let devolverProveedores = async(subProductos) => {
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/subproducto/devolver_proveedores/';
+    let resp = await axios.post(URL, {
+        subProductos: subProductos
+    });
+    // console.log('Data que devuelve la respuesta: ');
+    // console.log(resp.data);
     return resp.data;
 };
 
@@ -697,5 +706,6 @@ module.exports = {
     cambiarNombreEnServer,
     devolverUltimoDni,
     analizarCliente,
-    agregarPuntoEntrega
+    agregarPuntoEntrega,
+    devolverProveedores
 }

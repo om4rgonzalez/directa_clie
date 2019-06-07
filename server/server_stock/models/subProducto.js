@@ -4,6 +4,10 @@ let Schema = mongoose.Schema;
 
 let subProductoSchema = new Schema({
 
+        proveedor: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Proveedor'
+        },
         codigoProveedor: {
             type: String,
             default: '0'

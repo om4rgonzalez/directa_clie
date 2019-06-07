@@ -118,7 +118,7 @@ app.get('/persona/:id', function(req, res) {
 })
 
 
-app.post('/persona/nueva/', function(req, res) {
+app.post('/persona/nueva/', async function(req, res) {
     let objeto = req.body;
     let persona = new Persona({
         _id: objeto._id,
