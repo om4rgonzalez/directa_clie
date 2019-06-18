@@ -631,7 +631,7 @@ let devolverUltimoDni = async() => {
 };
 
 let analizarCliente = async(cliente) => {
-    let URL = '/pedido/analizar_cliente/';
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/pedido/analizar_cliente/';
     console.log('Llamando a la URL: ' + URL);
     let resp = await axios.post(URL, {
         cliente: cliente
@@ -641,7 +641,7 @@ let analizarCliente = async(cliente) => {
 };
 
 let agregarPuntoEntrega = async(domicilio, cliente) => {
-    let URL = '/pedido/analizar_cliente/';
+    let URL = process.env.URL_SERVICE + process.env.PORT + '/pedido/analizar_cliente/';
     console.log('Llamando a la URL: ' + URL);
     let resp = await axios.post(URL, {
         domicilio: domicilio,

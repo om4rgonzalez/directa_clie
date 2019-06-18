@@ -104,6 +104,13 @@ app.post('/pedido/analizar_cliente/', async function(req, res) {
             idCliente = vCliente.idCliente;
         else
             idCliente = null;
+
+        res.json({
+            ok: true,
+            message: 'Devolviendo el id de cliente',
+            idCliente
+        });
+
     } else {
         //el cliente ya existe, tengo que verificar si es que se esta agregando un nuevo punto de entrega
         if (req.body.cliente.puntoEntrega._id == 0) {
@@ -113,22 +120,27 @@ app.post('/pedido/analizar_cliente/', async function(req, res) {
             }
         }
         idCliente = req.body.cliente.id;
+
+        res.json({
+            ok: true,
+            message: 'Devolviendo el id de cliente',
+            idCliente
+        });
     }
 
-    res.json({
-        ok: true,
-        message: 'Devolviendo el id de cliente',
-        idCliente
-    });
+
 });
 
 app.post('/pedido/nuevo_pedido/', async function(req, res) {
 
     console.log('Nuevo pedido recibido');
+
     console.log('El cliente es nuevo, hay que darle de alta');
     var oCliente = await funciones.analizarCliente(req.body.cliente);
     if (oCliente.ok) {
         req.body.cliente.id = oCliente.idCliente;
+        console.log('Se completo correctamente el analisis del cliente');
+
     } else {
         return res.json({
             ok: false,

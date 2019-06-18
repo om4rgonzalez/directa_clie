@@ -69,7 +69,7 @@ app.post('/cliente/importar/', async function(req, res) {
 
 
 app.post('/cliente/nuevo/', async function(req, res) {
-    var contactos = [];
+    let contactos = [];
     let domiciliosEntrega = [];
     //Valido que el json de entrada tenga todos los datos
     if (req.body.domicilio && req.body.contactos && req.body.cliente && req.body.persona) {
@@ -115,57 +115,6 @@ app.post('/cliente/nuevo/', async function(req, res) {
                             let respuesta = await funciones.nuevoContacto(contacto);
                             if (respuesta.ok) {
                                 contactos.push(contacto._id);
-                                //doy de alta a la persona
-                                let persona = new Persona({
-                                    tipoDni: req.body.persona.tipoDni,
-                                    dni: req.body.persona.dni,
-                                    apellidos: req.body.persona.apellidos.toUpperCase(),
-                                    nombres: req.body.persona.nombres.toUpperCase(),
-                                    fechaNacimiento: req.body.persona.fechaNacimiento
-                                });
-                                try {
-                                    let respPersona = await funciones.nuevaPersona(persona);
-                                    if (respPersona.ok) {
-                                        let cliente = new Cliente({
-                                            datosPersonales: persona._id,
-                                            idCliente: req.body.cliente.idCliente,
-                                            plataformaUsadaParaAlta: req.body.cliente.plataformaUsadaParaAlta.toUpperCase(),
-                                            puntosEntrega: domiciliosEntrega,
-                                            contactos: contactos,
-                                            calificacion: 0
-                                        });
-                                        cliente.save((err, clienteDB) => {
-                                            if (err) {
-                                                console.log('El alta del cliente arrojo un error');
-                                                console.log('Error: ' + err.message);
-                                                return res.json({
-                                                    ok: false,
-                                                    message: 'El alta del cliente arrojo un error',
-                                                    idCliente: null
-                                                });
-                                            }
-
-                                            console.log('El cliente con dni ' + persona.dni + ' ha sido dado de alta');
-                                            res.json({
-                                                ok: true,
-                                                message: 'Alta completada',
-                                                idCliente: cliente._id
-                                            });
-                                        });
-                                    } else {
-                                        return res.json({
-                                            ok: false,
-                                            message: 'Error al dar de alta los datos personales',
-                                            idCliente: null
-                                        });
-                                    }
-                                } catch (e) {
-                                    return res.json({
-                                        ok: false,
-                                        message: 'Error al dar de alta los datos personales',
-                                        idCliente: null
-                                    });
-                                }
                             }
                             // console.log('array de contactos antes de asignarselo al cliente: ' + contactos);
                         } catch (e) {
@@ -177,6 +126,58 @@ app.post('/cliente/nuevo/', async function(req, res) {
                                 idCliente: null
                             });
                         }
+                    }
+
+                    //doy de alta a la persona
+                    let persona = new Persona({
+                        tipoDni: req.body.persona.tipoDni,
+                        dni: req.body.persona.dni,
+                        apellidos: req.body.persona.apellidos.toUpperCase(),
+                        nombres: req.body.persona.nombres.toUpperCase(),
+                        fechaNacimiento: req.body.persona.fechaNacimiento
+                    });
+                    try {
+                        let respPersona = await funciones.nuevaPersona(persona);
+                        if (respPersona.ok) {
+                            let cliente = new Cliente({
+                                datosPersonales: respPersona.PersonaDB,
+                                idCliente: req.body.cliente.idCliente,
+                                plataformaUsadaParaAlta: req.body.cliente.plataformaUsadaParaAlta.toUpperCase(),
+                                puntosEntrega: domiciliosEntrega,
+                                contactos: contactos,
+                                calificacion: 0
+                            });
+                            cliente.save((err, clienteDB) => {
+                                if (err) {
+                                    console.log('El alta del cliente arrojo un error');
+                                    console.log('Error: ' + err.message);
+                                    return res.json({
+                                        ok: false,
+                                        message: 'El alta del cliente arrojo un error',
+                                        idCliente: null
+                                    });
+                                }
+
+                                console.log('El cliente con dni ' + persona.dni + ' ha sido dado de alta');
+                                res.json({
+                                    ok: true,
+                                    message: 'Alta completada',
+                                    idCliente: cliente._id
+                                });
+                            });
+                        } else {
+                            return res.json({
+                                ok: false,
+                                message: 'Error al dar de alta los datos personales',
+                                idCliente: null
+                            });
+                        }
+                    } catch (e) {
+                        return res.json({
+                            ok: false,
+                            message: 'Error al dar de alta los datos personales',
+                            idCliente: null
+                        });
                     }
                 }
             }
