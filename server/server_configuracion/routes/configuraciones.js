@@ -156,7 +156,7 @@ app.post('/conf/get_dolar/', async function(req, res) {
         i++;
     }
     res.json({
-        dolar
+        "fulfillmentText": dolar
     });
 });
 
