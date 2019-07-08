@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const funciones = require('../../middlewares/funciones');
 const Configuracion = require('../models/configuracion');
+const axios = require('axios');
 
 
 
@@ -134,6 +135,30 @@ app.post('/configuraciones/obtener_ultimo_dni/', async function(req, res) {
                 dni: dni
             });
         });
+});
+
+app.get('/conf/get_dolar/', async function(req, res) {
+
+    let URL = 'https://api.estadisticasbcra.com/usd';
+    console.log('Llamando a la URL: ' + URL);
+    let token = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTQxMzczNDEsInR5cGUiOiJleHRlcm5hbCIsInVzZXIiOiJvbTRyLmdvbnphbGV6QGdtYWlsLmNvbSJ9.zqNVolnhEO_l3t3TN-Gk_WT2nyMDlp0amrvOmx7uoIhceJtwoTs6waBaaJzwlnsMEaTgvOVhxxy9DCAkHjUwGg';
+    let resp = await axios.get(URL, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    let dolar;
+    // console.log(resp.data);
+    let i = 0;
+    while (i < resp.data.length) {
+        // console.log(resp.data[i]);
+        dolar = resp.data[i].v;
+        i++;
+    }
+    res.json({
+        ok: true,
+        dolar: dolar
+    });
 });
 
 module.exports = app;

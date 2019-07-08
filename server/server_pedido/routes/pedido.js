@@ -140,6 +140,7 @@ app.post('/pedido/nuevo_pedido/', async function(req, res) {
     if (oCliente.ok) {
         req.body.cliente.id = oCliente.idCliente;
         console.log('Se completo correctamente el analisis del cliente');
+        
 
     } else {
         return res.json({
