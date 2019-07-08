@@ -137,7 +137,7 @@ app.post('/configuraciones/obtener_ultimo_dni/', async function(req, res) {
         });
 });
 
-app.get('/conf/get_dolar/', async function(req, res) {
+app.post('/conf/get_dolar/', async function(req, res) {
 
     let URL = 'https://api.estadisticasbcra.com/usd';
     console.log('Llamando a la URL: ' + URL);
