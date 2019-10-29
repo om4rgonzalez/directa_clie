@@ -17,7 +17,7 @@
         "express": "^4.16.4",
         "fs": "0.0.1-security",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.5.3",
+        "mongoose": "^5.7.5",
         "mongoose-unique-validator": "^2.0.3",
         "underscore": "^1.9.1"
     }
